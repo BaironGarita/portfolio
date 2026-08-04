@@ -1,47 +1,32 @@
-<<<<<<< HEAD
-# Astro Starter Kit: Minimal
-
-```sh
-pnpm create astro@latest -- --template minimal
-```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-=======
 # portfolio
->>>>>>> 6b156afb5d6eb0be7e8bd047a24c544bb109ea23
+
+Portafolio personal de Bairon Garita — desarrollador web enfocado en interfaces limpias, experiencia de usuario y código mantenible.
+
+## 🚀 Tecnologías
+
+- [Astro](https://astro.build)
+- Tailwind CSS
+- Motion (animaciones)
+
+## 🧞 Comandos
+
+Todos los comandos se ejecutan desde la raíz del proyecto:
+
+| Comando                    | Acción                                        |
+| :------------------------- | :-------------------------------------------- |
+| `pnpm install`             | Instala las dependencias                      |
+| `pnpm dev`                 | Inicia el servidor local en `localhost:4321`  |
+| `pnpm build`               | Genera el sitio de producción en `./dist/`    |
+| `pnpm preview`             | Previsualiza el build localmente              |
+| `pnpm astro ...`           | Comandos CLI como `astro add`, `astro check`  |
+
+## ☁️ Despliegue en Vercel
+
+El proyecto está configurado para desplegarse en [Vercel](https://vercel.com):
+
+1. Importa el repositorio en Vercel.
+2. Vercel detecta Astro automáticamente (build: `pnpm build`, output: `dist`).
+3. En *Settings → General → Node.js Version*, usa Node.js 22 o superior.
+
+> Nota: tras el primer despliegue, actualiza `src/site.config.ts` y `public/robots.txt`
+> con tu dominio real de Vercel (p. ej. `https://portfolio.vercel.app`).
