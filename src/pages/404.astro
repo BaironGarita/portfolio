@@ -1,0 +1,62 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE } from "../site.config";
+---
+
+<BaseLayout
+  title={`404 — Página no encontrada | ${SITE.name}`}
+  description="La página que buscas no existe. Vuelve al inicio del portafolio."
+>
+  <div class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4">
+    <!-- Background orbs -->
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute left-[-6rem] top-[-4rem] h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl"></div>
+      <div class="absolute bottom-[-4rem] right-[-6rem] h-80 w-80 rounded-full bg-blue-500/10 blur-3xl"></div>
+    </div>
+
+    <div class="text-center">
+      <!-- Glitch-like 404 -->
+      <h1 class="relative mb-4 text-[8rem] font-black leading-none tracking-tight sm:text-[10rem]">
+        <span
+          class="bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 bg-clip-text text-transparent"
+          aria-hidden="true"
+        >404</span>
+        <span class="sr-only">404</span>
+      </h1>
+
+      <p class="mb-3 text-lg font-semibold text-white sm:text-xl">
+        Página no encontrada
+      </p>
+      <p class="mx-auto mb-10 max-w-md text-sm leading-relaxed text-slate-400 sm:text-base">
+        La ruta a la que intentas acceder no existe o fue movida.
+        Revisa la URL o vuelve al inicio.
+      </p>
+
+      <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <a
+          href={`${import.meta.env.BASE_URL}`}
+          class="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 via-sky-500 to-blue-600 px-6 py-3 text-sm font-medium text-slate-950 shadow-lg shadow-cyan-500/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-cyan-400/30"
+        >
+          <svg class="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+          </svg>
+          Volver al inicio
+        </a>
+        <a
+          href={`mailto:${SITE.email}`}
+          class="inline-flex items-center gap-2 rounded-full border border-slate-700/70 bg-white/5 px-6 py-3 text-sm font-medium text-slate-200 backdrop-blur transition-all duration-300 hover:border-sky-400/30 hover:bg-white/10 hover:text-white"
+        >
+          Contactar
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer note -->
+    <p class="absolute bottom-8 text-xs text-slate-600">
+      &copy; {new Date().getFullYear()} — {SITE.name}
+    </p>
+  </div>
+</BaseLayout>
