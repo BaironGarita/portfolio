@@ -15,6 +15,8 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 html,
@@ -43,7 +45,7 @@ svg {
 
 /* Better section spacing for sticky header + anchor links */
 section {
-  scroll-margin-top: 5.5rem;
+  scroll-margin-top: calc(5.5rem + env(safe-area-inset-top));
 }
 
 /* Comfortable reading measure for long copy */
@@ -83,6 +85,26 @@ select:focus-visible,
 
   .nav-link {
     min-height: 40px;
+  }
+}
+
+/* Cleaner taps: no flash highlight, no double-tap zoom delay */
+a,
+button,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/*
+  Prevent iOS Safari auto-zoom when focusing form fields:
+  inputs must render at >= 16px on touch viewports.
+*/
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
   }
 }
 
