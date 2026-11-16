@@ -5,7 +5,9 @@ import "@fontsource/inter/500.css";
 import "@fontsource/inter/600.css";
 import "@fontsource/inter/700.css";
 import "@fontsource/inter/800.css";
+import { ClientRouter } from "astro:transitions";
 import { SITE } from "../site.config";
+import Icon from "../components/Icon.astro";
 
 interface Props {
   title?: string;
@@ -23,6 +25,18 @@ const {
 
 const canonical = new URL(canonicalURL, Astro.site).href;
 const ogImage = image ? new URL(image, Astro.site).href : undefined;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE.name,
+  url: SITE.url,
+  jobTitle: "Desarrollador Web",
+  sameAs: [SITE.social.github, SITE.social.linkedin],
+  email: SITE.email,
+  description: SITE.description,
+  knowsAbout: ["Desarrollo Web", "Frontend", "React", "Astro", "UI/UX"],
+};
 ---
 
 <!doctype html>
@@ -32,155 +46,218 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
     <link rel="icon" type="image/x-icon" href={`${import.meta.env.BASE_URL}favicon.ico`} />
     <link rel="canonical" href={canonical} />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <link rel="alternate" hreflang="es" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
+    />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#020617" />
-    <meta name="keywords" content="desarrollador web, portafolio, frontend, react, astro, Bairon Garita, desarrollo web" />
+    <meta
+      name="keywords"
+      content="desarrollador web, portafolio, frontend, react, astro, Bairon Garita, desarrollo web"
+    />
     <meta name="author" content={SITE.author} />
     <meta name="robots" content="index, follow" />
-    <meta name="language" content="Spanish" />
 
-    <!-- Open Graph / Facebook -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={SITE.locale} />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={SITE.name} />
-    {ogImage && (
-      <>
-        <meta property="og:image" content={ogImage} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content={ogImage} />
-      </>
-    )}
-    {!ogImage && (
-      <meta name="twitter:card" content="summary" />
-    )}
+    {
+      ogImage && (
+        <>
+          <meta property="og:image" content={ogImage} />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:image" content={ogImage} />
+        </>
+      )
+    }
+    {!ogImage && <meta name="twitter:card" content="summary" />}
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:creator" content={SITE.author} />
 
     <title>{title}</title>
 
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "{SITE.name}",
-        "url": "{SITE.url}",
-        "jobTitle": "Desarrollador Web",
-        "sameAs": [
-          "{SITE.social.github}",
-          "{SITE.social.linkedin}"
-        ],
-        "email": "{SITE.email}",
-        "description": "{SITE.description}",
-        "knowsAbout": ["Desarrollo Web", "Frontend", "React", "Astro", "UI/UX"]
-      }
-    </script>
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <ClientRouter />
   </head>
   <body class="bg-slate-950 text-slate-100 antialiased">
-    <!-- Scroll Progress Bar -->
-    <div id="progress-bar" class="scroll-progress-bar"></div>
+    <div id="progress-bar" transition:persist class="scroll-progress-bar" aria-hidden="true"></div>
 
     <slot />
 
-    <!-- Back to Top Button -->
     <button
       id="back-to-top"
+      transition:persist
       type="button"
-      class="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] right-[calc(1.5rem+env(safe-area-inset-right))] z-50 flex h-11 w-11 items-center justify-center rounded-full border border-slate-700/70 bg-slate-900/80 text-slate-300 shadow-lg opacity-0 translate-y-3 pointer-events-none backdrop-blur-sm transition-all duration-300 hover:border-sky-400/30 hover:bg-sky-500/20 hover:text-white hover:shadow-sky-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 active:scale-95"
+      class="btn btn-ghost btn-icon fixed right-[calc(1rem+env(safe-area-inset-right))] bottom-[calc(1rem+env(safe-area-inset-bottom))] z-50 pointer-events-none translate-y-2 opacity-0 shadow-lg backdrop-blur-sm sm:right-[calc(1.5rem+env(safe-area-inset-right))] sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))]"
       aria-label="Volver arriba"
+      aria-hidden="true"
       tabindex="-1"
     >
-      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-      </svg>
+      <Icon name="chevronUp" class="h-5 w-5" />
     </button>
 
     <script type="module">
-      import { animate, inView, stagger, scroll } from "motion";
+      import { animate, stagger } from "motion";
 
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      // Expo-out: fast start, graceful settle — feels crisper than plain ease-out
+      const EASE = [0.16, 1, 0.3, 1];
 
+      // — Runs once: this module stays alive across view-transition navigations —
       if (!reduceMotion) {
-        // --- Accent hue animation ---
-        animate(
-          ":root",
-          { "--accent-hue": [198, 222, 188, 198] },
-          { duration: 18, repeat: Infinity, ease: "linear" }
+        // Subtle accent shift
+        animate(":root", { "--accent-hue": [198, 215, 190, 198] }, { duration: 24, repeat: Infinity, ease: "linear" });
+      }
+
+      let revealObserver;
+
+      function observeReveals() {
+        revealObserver?.disconnect();
+        if (reduceMotion || !("IntersectionObserver" in window)) return;
+
+        revealObserver = new IntersectionObserver(
+          (entries) => {
+            entries
+              .filter((entry) => entry.isIntersecting)
+              .forEach((entry) => {
+                const el = entry.target;
+                el.dataset.revealed = "true";
+                revealObserver.unobserve(el);
+                const delay = Number(el.dataset.revealDelay) || 0;
+                window.setTimeout(() => {
+                  animate(el, { opacity: [0, 1], y: [16, 0] }, { duration: 0.5, ease: EASE });
+                  const children = el.querySelectorAll("[data-reveal-child]");
+                  if (children.length) {
+                    animate(
+                      children,
+                      { opacity: [0, 1], y: [10, 0] },
+                      { duration: 0.45, delay: stagger(0.06), ease: EASE }
+                    );
+                  }
+                }, delay);
+              });
+          },
+          { rootMargin: "0px 0px -48px" },
         );
 
-        // --- Scroll progress bar ---
-        const progressBar = document.getElementById("progress-bar");
-        if (progressBar) {
-          scroll((progress) => {
-            progressBar.style.transform = `scaleX(${progress})`;
-          });
+        document.querySelectorAll("[data-motion-reveal]:not([data-revealed])").forEach((el) => {
+          revealObserver.observe(el);
+        });
+      }
+
+      // Batch scroll work into one animation frame to avoid repeated layout reads.
+      let scrollTicking = false;
+      const updateScrollState = () => {
+        // Hero parallax: uses the `translate` property so it never fights Motion's transforms
+        if (!reduceMotion) {
+          const y = window.scrollY;
+          if (y < window.innerHeight * 1.5) {
+            document.querySelectorAll("[data-motion-orb]").forEach((orb, i) => {
+              orb.style.translate = `0 ${Math.round(y * (i % 2 ? -0.05 : 0.08))}px`;
+            });
+          }
         }
 
-        // --- Back to top ---
-        const backToTop = document.getElementById("back-to-top");
-        if (backToTop) {
-          const setBackToTopVisible = (visible) => {
-            backToTop.classList.toggle("opacity-0", !visible);
-            backToTop.classList.toggle("opacity-100", visible);
-            backToTop.classList.toggle("translate-y-3", !visible);
-            backToTop.classList.toggle("translate-y-0", visible);
-            backToTop.classList.toggle("pointer-events-none", !visible);
-            backToTop.classList.toggle("pointer-events-auto", visible);
-            backToTop.tabIndex = visible ? 0 : -1;
-            backToTop.setAttribute("aria-hidden", String(!visible));
-          };
+        const bar = document.getElementById("progress-bar");
+        if (bar) {
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          bar.style.transform = `scaleX(${max > 0 ? Math.min(window.scrollY / max, 1) : 0})`;
+        }
+        const btn = document.getElementById("back-to-top");
+        if (btn) {
+          const visible = window.scrollY > 400;
+          btn.classList.toggle("opacity-0", !visible);
+          btn.classList.toggle("opacity-100", visible);
+          btn.classList.toggle("translate-y-2", !visible);
+          btn.classList.toggle("translate-y-0", visible);
+          btn.classList.toggle("pointer-events-none", !visible);
+          btn.classList.toggle("pointer-events-auto", visible);
+          btn.tabIndex = visible ? 0 : -1;
+          btn.setAttribute("aria-hidden", String(!visible));
+        }
+      };
 
-          scroll((progress) => {
-            setBackToTopVisible(progress > 0.15);
-          });
+      const onScroll = () => {
+        if (scrollTicking) return;
+        scrollTicking = true;
+        window.requestAnimationFrame(() => {
+          scrollTicking = false;
+          updateScrollState();
+        });
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll, { passive: true });
 
-          backToTop.addEventListener("click", () => {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          });
+      // Delegated click (survives navigations and persisted nodes)
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest("#back-to-top")) return;
+        window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+      });
+
+      // Cursor spotlight for interactive cards (fine pointers only)
+      if (!reduceMotion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        document.addEventListener(
+          "pointermove",
+          (e) => {
+            const card = e.target.closest(".card-spotlight");
+            if (!card) return;
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty("--spot-x", `${e.clientX - rect.left}px`);
+            card.style.setProperty("--spot-y", `${e.clientY - rect.top}px`);
+          },
+          { passive: true }
+        );
+      }
+
+      // — Runs once per page view: initial load + after every view transition —
+      function setupPage() {
+        if (document.getElementById("motion-ready")) return;
+        const marker = document.createElement("span");
+        marker.id = "motion-ready";
+        marker.hidden = true;
+        document.body.appendChild(marker);
+
+        document.documentElement.classList.add("motion-ok");
+        observeReveals();
+        onScroll();
+
+        if (reduceMotion) {
+          document
+            .querySelectorAll("[data-motion-hero], [data-motion-reveal], [data-reveal-child]")
+            .forEach((el) => {
+              el.style.opacity = "1";
+              el.dataset.revealed = "true";
+            });
+          return;
         }
 
-        // --- Orb animations ---
         animate(
           "[data-motion-orb]",
-          { x: [0, 12, -8, 0], y: [0, -18, 10, 0], scale: [1, 1.08, 0.98, 1] },
-          { duration: 14, repeat: Infinity, ease: "ease-in-out" }
+          { x: [0, 10, -6, 0], y: [0, -14, 8, 0] },
+          { duration: 16, repeat: Infinity, ease: "ease-in-out" }
         );
 
-        // --- Hero entrance stagger ---
         animate(
           "[data-motion-hero]",
-          { opacity: [0, 1], y: [18, 0], filter: ["blur(8px)", "blur(0px)"] },
-          { duration: 0.75, delay: stagger(0.08), ease: "ease-out" }
+          { opacity: [0, 1], y: [14, 0] },
+          { duration: 0.55, delay: stagger(0.07), ease: EASE }
         );
-
-        // --- Scroll reveal with parallax-like effect ---
-        inView("[data-motion-reveal]", (element) => {
-          const speed = element.getAttribute("data-speed") || "1";
-          const yOffset = 20 * parseFloat(speed);
-          animate(
-            element,
-            { opacity: [0, 1], y: [yOffset, 0], filter: ["blur(8px)", "blur(0px)"] },
-            { duration: 0.65, ease: "ease-out" }
-          );
-        }, { margin: "-80px 0px" });
-
-        // --- Scale in effect for specific elements ---
-        inView("[data-motion-scale]", (element) => {
-          animate(
-            element,
-            { opacity: [0, 1], scale: [0.92, 1], filter: ["blur(4px)", "blur(0px)"] },
-            { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
-          );
-        }, { margin: "-60px 0px" });
       }
+
+      setupPage();
+      document.addEventListener("astro:after-swap", setupPage);
+      document.addEventListener("astro:page-load", setupPage);
     </script>
   </body>
 </html>

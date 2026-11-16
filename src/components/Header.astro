@@ -1,8 +1,8 @@
 ---
 import { SITE } from "../site.config";
+import Icon from "./Icon.astro";
 ---
 
-<!-- Skip to content — keyboard / screen reader accessibility -->
 <a
   href="#main-content"
   class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-sky-500 focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-slate-950 focus:shadow-lg focus:outline-none"
@@ -12,23 +12,28 @@ import { SITE } from "../site.config";
 
 <header
   id="header"
-  class="fixed top-0 left-0 right-0 z-50 border-b border-transparent bg-slate-950/40 pt-[env(safe-area-inset-top)] backdrop-blur-xl transition-all duration-300"
+  class="fixed top-0 right-0 left-0 z-50 border-b border-transparent bg-slate-950/40 pt-[env(safe-area-inset-top)] backdrop-blur-xl transition-[background-color,border-color,box-shadow,transform] duration-300"
   data-scrolled="false"
 >
-  <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6" aria-label="Principal">
-    <a href="#hero" class="text-base font-semibold tracking-tight sm:text-lg" aria-label={`${SITE.name} — Inicio`}>
-      Bairon<span class="bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 bg-clip-text text-transparent">.Dev</span>
+  <nav class="container-page flex h-16 items-center justify-between" aria-label="Principal">
+    <a
+      href="#hero"
+      class="text-base font-semibold tracking-tight sm:text-lg"
+      aria-label={`${SITE.name} — Inicio`}
+    >
+      Bairon<span class="bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 bg-clip-text text-transparent"
+        >.Dev</span
+      >
     </a>
 
-    <!-- Desktop navigation -->
-    <ul class="hidden items-center gap-1 rounded-full border border-slate-800/70 bg-white/[0.03] p-1 shadow-sm backdrop-blur md:flex">
+    <ul class="hidden items-center gap-1 rounded-full border border-slate-800/70 bg-white/[0.03] p-1 md:flex">
       {
         SITE.nav.map((item) => (
           <li>
             <a
               href={item.href}
               data-nav-link={item.href}
-              class="nav-link inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition-all duration-200 hover:bg-white/10 hover:text-white"
+              class="nav-link inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-slate-300 hover:bg-white/10 hover:text-white"
             >
               {item.label}
             </a>
@@ -37,136 +42,110 @@ import { SITE } from "../site.config";
       }
     </ul>
 
-    <div class="flex items-center gap-3">
-      <a
-        href="#contacto"
-        class="hidden sm:inline-flex items-center rounded-full bg-gradient-to-r from-cyan-400 via-sky-500 to-blue-600 px-4 py-2 text-sm font-medium text-slate-950 shadow-lg shadow-cyan-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-cyan-400/30"
-      >
-        Contactar
-      </a>
+    <div class="flex items-center gap-2 sm:gap-3">
+      <a href="#contacto" class="btn btn-primary hidden sm:inline-flex">Contactar</a>
 
-      <!-- Hamburger button -->
       <button
         id="menu-toggle"
         type="button"
-        class="relative z-50 inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-700/70 bg-white/[0.03] text-slate-300 transition-all duration-200 hover:bg-white/10 hover:text-white active:scale-95 md:hidden"
+        class="btn btn-ghost btn-icon md:hidden"
         aria-label="Abrir menú"
         aria-expanded="false"
         aria-controls="mobile-menu"
       >
-        <svg id="menu-open-icon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-        <svg id="menu-close-icon" class="hidden h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
+        <Icon name="menu" id="menu-open-icon" class="h-5 w-5" />
+        <Icon name="close" id="menu-close-icon" class="hidden h-5 w-5" />
       </button>
     </div>
   </nav>
+</header>
 
-  <!-- Mobile menu panel -->
+<!-- Mobile drawer — lives OUTSIDE <header>: backdrop-filter/transform on the header
+     would make it the containing block for position:fixed and trap the menu. -->
+<div
+  id="mobile-menu"
+  class="pointer-events-none fixed inset-0 z-[60] hidden md:hidden"
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menú de navegación"
+>
   <div
-    id="mobile-menu"
-    class="pointer-events-none fixed inset-0 z-40 hidden md:hidden"
-    aria-hidden="true"
-    role="dialog"
-    aria-modal="true"
-    aria-label="Menú de navegación"
+    id="menu-overlay"
+    class="absolute inset-0 bg-slate-950/80 opacity-0 backdrop-blur-sm transition-opacity duration-300"
   >
-    <!-- Backdrop -->
-    <div id="menu-overlay" class="absolute inset-0 bg-slate-950/80 opacity-0 backdrop-blur-md"></div>
+  </div>
 
-    <!-- Panel -->
+  <div
+    id="menu-panel"
+    class="absolute top-0 right-0 flex h-full w-[min(18rem,85vw)] translate-x-full flex-col border-l border-slate-700/70 bg-slate-900/95 shadow-2xl backdrop-blur-xl transition-transform duration-300 ease-out"
+  >
     <div
-      id="menu-panel"
-      class="absolute right-0 top-0 flex h-full w-72 max-w-[85vw] translate-x-full flex-col border-l border-slate-700/70 bg-slate-900/95 shadow-2xl backdrop-blur-xl"
+      class="flex items-center justify-between border-b border-slate-800/60 px-5 pt-[calc(1rem+env(safe-area-inset-top))] pb-4"
     >
-      <!-- Panel header -->
-      <div class="flex items-center justify-between border-b border-slate-800/60 px-5 pb-4 pt-[calc(1.25rem+env(safe-area-inset-top))]">
-        <a href="#hero" class="menu-link text-base font-semibold tracking-tight text-white" aria-label={`${SITE.name} — Inicio`}>
-          Bairon<span class="bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 bg-clip-text text-transparent">.Dev</span>
-        </a>
-        <button
-          id="menu-close"
-          type="button"
-          class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-700/70 bg-white/[0.03] text-slate-300 transition-all duration-200 hover:bg-white/10 hover:text-white active:scale-95"
-          aria-label="Cerrar menú"
+      <a
+        href="#hero"
+        class="menu-link text-base font-semibold text-white"
+        aria-label={`${SITE.name} — Inicio`}
+      >
+        Bairon<span
+          class="bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 bg-clip-text text-transparent"
+          >.Dev</span
         >
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
+      </a>
+      <button id="menu-close" type="button" class="btn btn-ghost btn-icon" aria-label="Cerrar menú">
+        <Icon name="close" class="h-5 w-5" />
+      </button>
+    </div>
 
-      <!-- Scrollable nav -->
-      <nav class="flex-1 overflow-y-auto overscroll-contain px-5 py-6" aria-label="Móvil">
-        <ul class="flex flex-col gap-1.5">
-          {
-            SITE.nav.map((item, i) => (
-              <li>
-                <a
-                  href={item.href}
-                  data-nav-link={item.href}
-                  class="menu-link nav-link inline-flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-base font-medium text-slate-300 opacity-0 transition-all duration-200 hover:bg-white/10 hover:text-white active:scale-[0.98]"
-                  style={`transform: translateX(16px); transition-delay: ${i * 60}ms`}
-                >
-                  <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/5 text-xs font-bold text-sky-300" aria-hidden="true">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  {item.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
+    <nav class="flex-1 overflow-y-auto overscroll-contain px-5 py-5" aria-label="Móvil">
+      <ul class="flex flex-col gap-1">
+        {
+          SITE.nav.map((item, index) => (
+            <li>
+              <a
+                href={item.href}
+                data-nav-link={item.href}
+                style={`--menu-delay: ${90 + index * 45}ms`}
+                class="menu-link nav-link flex w-full items-center rounded-xl px-4 py-3 text-base font-medium text-slate-300 hover:bg-white/10 hover:text-white"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
 
-        <hr class="my-6 border-slate-700/50" />
-
-        <!-- Social links -->
-        <div class="flex flex-col gap-3">
-          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Redes</p>
-          <div class="flex gap-3">
-            <a
-              href={SITE.social.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="menu-link inline-flex items-center gap-2 rounded-full border border-slate-700/70 px-4 py-2.5 text-sm font-medium text-slate-300 opacity-0 transition-all duration-200 hover:bg-white/10 hover:text-white active:scale-[0.98]"
-            >
-              <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-              </svg>
-              GitHub
-            </a>
-            <a
-              href={SITE.social.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="menu-link inline-flex items-center gap-2 rounded-full border border-slate-700/70 px-4 py-2.5 text-sm font-medium text-slate-300 opacity-0 transition-all duration-200 hover:bg-white/10 hover:text-white active:scale-[0.98]"
-            >
-              <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-              </svg>
-              LinkedIn
-            </a>
-          </div>
-        </div>
-      </nav>
-
-      <!-- Pinned CTA (always visible at bottom of the panel) -->
-      <div class="border-t border-slate-800/60 px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-4">
+      <div class="mt-6 flex gap-2 border-t border-slate-800/60 pt-5" style="--menu-delay: 300ms">
         <a
-          href="#contacto"
-          class="menu-link inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 via-sky-500 to-blue-600 px-5 py-3 text-sm font-medium text-slate-950 opacity-0 shadow-lg shadow-cyan-500/20 transition-all duration-200 hover:shadow-cyan-400/30 active:scale-[0.98]"
+          href={SITE.social.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="menu-link btn btn-ghost btn-icon"
+          aria-label="GitHub"
         >
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-          </svg>
-          Contactar
+          <Icon name="github" class="h-4 w-4" />
+        </a>
+        <a
+          href={SITE.social.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="menu-link btn btn-ghost btn-icon"
+          aria-label="LinkedIn"
+        >
+          <Icon name="linkedin" class="h-4 w-4" />
         </a>
       </div>
+    </nav>
+
+    <div
+      class="border-t border-slate-800/60 px-5 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]"
+      style="--menu-delay: 345ms"
+    >
+      <a href="#contacto" class="menu-link btn btn-primary btn-block">Contactar</a>
     </div>
   </div>
-</header>
+</div>
 
 <style>
   .nav-link.is-active {
@@ -175,256 +154,218 @@ import { SITE } from "../site.config";
     box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.25);
   }
 
+  /* Drawer items: staggered entrance (delay lives in the OPEN state, so closing is instant) */
+  #mobile-menu .menu-link {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 320ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
+      color 200ms ease,
+      background-color 200ms ease,
+      border-color 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  #mobile-menu.is-open .menu-link {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: var(--menu-delay, 0ms);
+  }
+
   #header[data-scrolled="true"] {
     border-color: rgba(30, 41, 59, 0.7);
-    background-color: rgba(2, 6, 23, 0.85);
+    background-color: rgba(2, 6, 23, 0.88);
     box-shadow: 0 10px 40px -20px rgba(0, 0, 0, 0.5);
   }
 
-  /* Subtle scrollbar inside the menu panel */
-  #menu-panel nav::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  #menu-panel nav::-webkit-scrollbar-thumb {
-    background: #334155;
+  #header[data-hidden="true"] {
+    transform: translateY(-100%);
   }
 </style>
 
-<script>
-  import { animate } from "motion";
+<script data-astro-rerun>
+  (() => {
+    const header = document.getElementById("header");
+    const toggle = document.getElementById("menu-toggle");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const overlay = document.getElementById("menu-overlay");
+    const panel = document.getElementById("menu-panel");
+    const openIcon = document.getElementById("menu-open-icon");
+    const closeIcon = document.getElementById("menu-close-icon");
+    const closeButton = document.getElementById("menu-close");
+    const menuLinks = document.querySelectorAll(".menu-link");
+    const navLinks = document.querySelectorAll("[data-nav-link]");
 
-  const header = document.getElementById("header");
-  const toggle = document.getElementById("menu-toggle");
-  const mobileMenu = document.getElementById("mobile-menu");
-  const overlay = document.getElementById("menu-overlay");
-  const panel = document.getElementById("menu-panel");
-  const openIcon = document.getElementById("menu-open-icon");
-  const closeIcon = document.getElementById("menu-close-icon");
-  const closeButton = document.getElementById("menu-close");
-  const menuLinks = document.querySelectorAll(".menu-link");
-  const navLinks = document.querySelectorAll("[data-nav-link]");
-  let isOpen = false;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // — Scroll state: scrolled styling + hide-on-scroll-down (bound once) —
+    if (!window.__headerScrollBound) {
+      window.__headerScrollBound = true;
+      let lastY = window.scrollY;
 
-  // --- Header scroll state ---
-  function updateHeaderScroll() {
-    if (!header) return;
-    const scrolled = window.scrollY > 24;
-    header.dataset.scrolled = String(scrolled);
-  }
-
-  updateHeaderScroll();
-  window.addEventListener("scroll", updateHeaderScroll, { passive: true });
-
-  // --- Active section highlighting ---
-  const sectionIds = Array.from(navLinks)
-    .map((link) => link.getAttribute("data-nav-link")?.replace("#", ""))
-    .filter(Boolean);
-
-  const sections = sectionIds
-    .map((id) => document.getElementById(id))
-    .filter(Boolean);
-
-  function setActiveNav(activeId) {
-    navLinks.forEach((link) => {
-      const href = link.getAttribute("data-nav-link");
-      const isActive = href === `#${activeId}`;
-      link.classList.toggle("is-active", isActive);
-      if (isActive) {
-        link.setAttribute("aria-current", "true");
-      } else {
-        link.removeAttribute("aria-current");
-      }
-    });
-  }
-
-  if (sections.length > 0 && "IntersectionObserver" in window) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-
-        if (visible.length > 0) {
-          setActiveNav(visible[0].target.id);
+      const onScroll = () => {
+        const el = document.getElementById("header");
+        if (!el) return;
+        const y = window.scrollY;
+        el.dataset.scrolled = String(y > 24);
+        if (window.__menuOpen || y < 220) {
+          el.dataset.hidden = "false";
+        } else if (y > lastY + 6) {
+          el.dataset.hidden = "true";
+        } else if (y < lastY - 6) {
+          el.dataset.hidden = "false";
         }
-      },
-      {
-        rootMargin: "-20% 0px -55% 0px",
-        threshold: [0, 0.25, 0.5, 0.75],
-      }
-    );
+        lastY = y;
+      };
 
-    sections.forEach((section) => observer.observe(section));
-  }
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+    } else if (header) {
+      // Fresh header after navigation: sync with current scroll state
+      header.dataset.scrolled = String(window.scrollY > 24);
+      header.dataset.hidden = window.__menuOpen || window.scrollY < 220 ? "false" : "true";
+    }
 
-  // --- Mobile menu ---
-  function openMenu() {
-    if (!mobileMenu || !toggle) return;
-    isOpen = true;
-    mobileMenu.classList.remove("hidden", "pointer-events-none");
-    mobileMenu.classList.add("pointer-events-auto");
-    mobileMenu.setAttribute("aria-hidden", "false");
-    toggle.setAttribute("aria-expanded", "true");
-    toggle.setAttribute("aria-label", "Cerrar menú");
-    openIcon?.classList.add("hidden");
-    closeIcon?.classList.remove("hidden");
+    // — Document-level listeners bound once (delegate to the fresh DOM) —
+    if (!window.__menuDocBound) {
+      window.__menuDocBound = true;
 
-    if (reduceMotion) {
-      overlay?.style.setProperty("opacity", "1");
-      panel?.style.setProperty("transform", "none");
-      menuLinks.forEach((link) => {
-        link.style.setProperty("opacity", "1");
-        link.style.setProperty("transform", "none");
+      document.addEventListener("keydown", (e) => {
+        if (!window.__menuOpen) return;
+        if (e.key === "Escape") {
+          document.getElementById("menu-close")?.click();
+          return;
+        }
+        if (e.key === "Tab") {
+          const panel = document.getElementById("menu-panel");
+          if (!panel) return;
+          const focusables = Array.from(panel.querySelectorAll(FOCUSABLE)).filter(
+            (el) => el.offsetParent !== null,
+          );
+          if (!focusables.length) return;
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
       });
-    } else {
-      animate(overlay, { opacity: [0, 1] }, { duration: 0.3, easing: "ease-out" });
-      animate(panel, { x: [null, 0] }, { duration: 0.4, easing: [0.16, 1, 0.3, 1] });
 
-      menuLinks.forEach((link, i) => {
-        animate(link, { opacity: [0, 1], x: [16, 0] }, { duration: 0.35, delay: 0.12 + i * 0.06, easing: "ease-out" });
+      window.addEventListener("resize", () => {
+        // Delegate to the fresh close button so the current run's handler closes the menu
+        if (window.innerWidth >= 768 && window.__menuOpen) {
+          document.getElementById("menu-close")?.click();
+        }
       });
     }
 
-    document.body.style.overflow = "hidden";
+    // — Active section highlight (re-created per page view) —
+    const sections = Array.from(navLinks)
+      .map((link) => document.getElementById(link.getAttribute("data-nav-link")?.replace("#", "") || ""))
+      .filter(Boolean);
 
-    // Focus the close button for keyboard users
-    closeButton?.focus();
-  }
-
-  function closeMenu() {
-    if (!mobileMenu || !toggle) return;
-
-    if (reduceMotion) {
-      overlay?.style.setProperty("opacity", "0");
-      panel?.style.setProperty("transform", "translateX(100%)");
-      menuLinks.forEach((link) => {
-        link.style.setProperty("opacity", "0");
-        link.style.setProperty("transform", "translateX(16px)");
-      });
-    } else {
-      animate(panel, { x: [0, 320] }, { duration: 0.25, easing: [0.4, 0, 1, 1] });
-      animate(overlay, { opacity: [1, 0] }, { duration: 0.2, easing: "ease-in" });
-
-      menuLinks.forEach((link) => {
-        animate(link, { opacity: [1, 0], x: [0, 16] }, { duration: 0.15, easing: "ease-in" });
+    function setActiveNav(activeId) {
+      navLinks.forEach((link) => {
+        const isActive = link.getAttribute("data-nav-link") === `#${activeId}`;
+        link.classList.toggle("is-active", isActive);
+        if (isActive) link.setAttribute("aria-current", "true");
+        else link.removeAttribute("aria-current");
       });
     }
 
-    setTimeout(() => {
-      // Clear inline styles so the base classes take over again
-      overlay?.style.removeProperty("opacity");
-      panel?.style.removeProperty("transform");
-      menuLinks.forEach((link) => {
-        link.style.removeProperty("opacity");
-        link.style.removeProperty("transform");
-      });
-
-      mobileMenu.classList.add("pointer-events-none", "hidden");
-      mobileMenu.classList.remove("pointer-events-auto");
-      mobileMenu.setAttribute("aria-hidden", "true");
-      toggle.setAttribute("aria-expanded", "false");
-      toggle.setAttribute("aria-label", "Abrir menú");
-      openIcon?.classList.remove("hidden");
-      closeIcon?.classList.add("hidden");
-      document.body.style.overflow = "";
-      isOpen = false;
-      toggle.focus();
-    }, reduceMotion ? 0 : 260);
-  }
-
-  toggle?.addEventListener("click", () => {
-    isOpen ? closeMenu() : openMenu();
-  });
-
-  closeButton?.addEventListener("click", closeMenu);
-  overlay?.addEventListener("click", closeMenu);
-
-  menuLinks.forEach((link) => {
-    link.addEventListener("click", closeMenu);
-  });
-
-  // --- Keyboard: Escape closes, Tab is trapped inside the dialog ---
-  const FOCUSABLE =
-    'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && isOpen) {
-      closeMenu();
-      return;
-    }
-
-    if (e.key === "Tab" && isOpen && panel) {
-      const focusables = Array.from(panel.querySelectorAll(FOCUSABLE)).filter(
-        (el) => el.offsetParent !== null
+    if (sections.length && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((e) => e.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+          if (visible[0]) setActiveNav(visible[0].target.id);
+        },
+        { rootMargin: "-20% 0px -55% 0px", threshold: [0, 0.25, 0.5] },
       );
-      if (focusables.length === 0) return;
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
+      sections.forEach((s) => observer.observe(s));
     }
-  });
 
-  // --- Swipe to close (mobile) ---
-  let swipeStartX = 0;
-  let swipeStartY = 0;
-  let isSwiping = false;
+    // — Mobile menu (CSS transitions) —
+    let closeTimer = 0;
 
-  panel?.addEventListener(
-    "touchstart",
-    (e) => {
-      if (!isOpen || e.touches.length !== 1) return;
-      swipeStartX = e.touches[0].clientX;
-      swipeStartY = e.touches[0].clientY;
-      isSwiping = true;
-    },
-    { passive: true }
-  );
+    function openMenu() {
+      if (!mobileMenu || !toggle) return;
+      window.clearTimeout(closeTimer);
+      window.__menuOpen = true;
+      mobileMenu.classList.remove("hidden", "pointer-events-none");
+      mobileMenu.classList.add("pointer-events-auto");
+      mobileMenu.setAttribute("aria-hidden", "false");
+      toggle.setAttribute("aria-expanded", "true");
+      toggle.setAttribute("aria-label", "Cerrar menú");
+      openIcon?.classList.add("hidden");
+      closeIcon?.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+      if (header) header.dataset.hidden = "false";
+      overlay?.classList.remove("opacity-0");
+      panel?.classList.remove("translate-x-full");
+      // Two frames so the closed state paints first; then items stagger in
+      requestAnimationFrame(() => requestAnimationFrame(() => mobileMenu.classList.add("is-open")));
+      closeButton?.focus();
+    }
 
-  panel?.addEventListener(
-    "touchmove",
-    (e) => {
-      if (!isSwiping || !isOpen || e.touches.length !== 1) return;
-      const dx = e.touches[0].clientX - swipeStartX;
-      const dy = e.touches[0].clientY - swipeStartY;
-      // Only react to a horizontal rightward swipe
-      if (dx > 0 && Math.abs(dx) > Math.abs(dy)) {
-        panel.style.transform = `translateX(${Math.min(dx, 160)}px)`;
+    function closeMenu() {
+      if (!mobileMenu || !toggle || !window.__menuOpen) return;
+      mobileMenu.classList.remove("is-open");
+
+      const finish = () => {
+        mobileMenu.classList.add("pointer-events-none", "hidden");
+        mobileMenu.classList.remove("pointer-events-auto");
+        mobileMenu.setAttribute("aria-hidden", "true");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute("aria-label", "Abrir menú");
+        openIcon?.classList.remove("hidden");
+        closeIcon?.classList.add("hidden");
+        document.body.style.overflow = "";
+        window.__menuOpen = false;
+        toggle.focus();
+      };
+
+      if (reduceMotion) {
+        overlay?.classList.add("opacity-0");
+        panel?.classList.add("translate-x-full");
+        finish();
+        return;
       }
-    },
-    { passive: true }
-  );
 
-  panel?.addEventListener(
-    "touchend",
-    () => {
-      if (!isSwiping) return;
-      isSwiping = false;
-      const match = panel.style.transform.match(/translateX\((\d+(?:\.\d+)?)px\)/);
-      const dx = match ? parseFloat(match[1]) : 0;
-      panel.style.transform = "";
-      if (dx > 70) {
-        closeMenu();
-      } else if (reduceMotion) {
-        // Restore the reduced-motion open state (no animations were used)
-        panel?.style.setProperty("transform", "none");
-      } else {
-        animate(panel, { x: [null, 0] }, { duration: 0.25, easing: [0.16, 1, 0.3, 1] });
-      }
-    },
-    { passive: true }
-  );
+      overlay?.classList.add("opacity-0");
+      panel?.classList.add("translate-x-full");
+      closeTimer = window.setTimeout(finish, 300);
+    }
 
-  window.addEventListener("resize", () => {
-    if (window.innerWidth >= 768 && isOpen) closeMenu();
-  });
+    toggle?.addEventListener("click", () => (window.__menuOpen ? closeMenu() : openMenu()));
+    closeButton?.addEventListener("click", closeMenu);
+    overlay?.addEventListener("click", closeMenu);
+    menuLinks.forEach((link) => link.addEventListener("click", closeMenu));
+
+    // Swipe-right to close (simple threshold, no live drag)
+    let touchX = 0;
+    panel?.addEventListener(
+      "touchstart",
+      (e) => {
+        if (e.touches.length === 1) touchX = e.touches[0].clientX;
+      },
+      { passive: true },
+    );
+    panel?.addEventListener(
+      "touchend",
+      (e) => {
+        if (!window.__menuOpen) return;
+        const dx = e.changedTouches[0].clientX - touchX;
+        if (dx > 80) closeMenu();
+      },
+      { passive: true },
+    );
+  })();
 </script>

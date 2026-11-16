@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# Reemplaza esta URL por tu dominio real de Vercel una vez desplegado.
-Sitemap: https://portfolio.vercel.app/sitemap-index.xml
+Sitemap: https://bairongarita.github.io/portafolio/sitemap-index.xml

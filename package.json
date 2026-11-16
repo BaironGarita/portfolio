@@ -2,6 +2,7 @@
   "name": "portfolio",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "pnpm@11.2.2",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -9,6 +10,8 @@
     "dev": "astro dev --background",
     "dev:fg": "astro dev",
     "build": "astro build",
+    "check": "astro check",
+    "format:check": "prettier --check .prettierrc.json package.json astro.config.mjs src/site.config.ts src/pages/blog/**/*.astro",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -23,9 +26,11 @@
   },
   "devDependencies": {
     "eslint": "^10.6.0",
+    "@astrojs/check": "^0.9.4",
     "eslint-plugin-astro": "^2.1.1",
     "prettier": "^3.9.4",
     "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.62.1"
   }
 }

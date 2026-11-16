@@ -16,6 +16,8 @@ const projects = defineCollection({
     order: z.number().default(0),
     draft: z.boolean().default(false),
     cover: z.string().optional(),
+    accent: z.string().default('from-cyan-400 to-sky-500'),
+    status: z.enum(['live', 'code']).default('code'),
   }),
 });
 

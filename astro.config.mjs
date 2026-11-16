@@ -1,18 +1,17 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
-import mdx from '@astrojs/mdx';
-import sitemap from '@astrojs/sitemap';
-import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from "astro/config";
+import mdx from "@astrojs/mdx";
+import sitemap from "@astrojs/sitemap";
+import tailwindcss from "@tailwindcss/vite";
 
-// Durante el build en Vercel, esta variable contiene el dominio de producción
-// (p. ej. https://portfolio.vercel.app). En local usamos un valor por defecto.
-const site = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : 'https://portfolio.vercel.app';
+// URL de GitHub Pages para el repositorio personal
+const site = "https://bairongarita.github.io";
+const base = "/portafolio";
 
 export default defineConfig({
   site,
-  trailingSlash: 'always',
+  base,
+  trailingSlash: "always",
   integrations: [mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
