@@ -4,9 +4,10 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
-// Fuente única de verdad para la URL del sitio (GitHub Pages, proyecto /portafolio).
+// Fuente única de verdad para la URL del sitio.
+// GitHub Pages de proyecto sirve en /<nombre-del-repo>: el repo es `portfolio`.
 const site = "https://bairongarita.github.io";
-const base = "/portafolio";
+const base = "/portfolio";
 
 export default defineConfig({
   site,

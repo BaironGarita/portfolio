@@ -3,7 +3,7 @@
 Portafolio personal de Bairon Garita, desarrollador web enfocado en interfaces limpias, accesibilidad y rendimiento.
 
 Sitio estático generado con [Astro](https://astro.build), desplegado en **GitHub Pages**
-(`https://bairongarita.github.io/portafolio/`).
+(`https://bairongarita.github.io/portfolio/`).
 
 ## Stack
 
