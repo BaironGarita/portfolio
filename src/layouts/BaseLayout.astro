@@ -1,41 +1,70 @@
 ---
 import "../styles/global.css";
-import "@fontsource/inter/400.css";
-import "@fontsource/inter/500.css";
-import "@fontsource/inter/600.css";
-import "@fontsource/inter/700.css";
-import "@fontsource/inter/800.css";
+import "@fontsource/inter/latin-400.css";
+import "@fontsource/inter/latin-500.css";
+import "@fontsource/inter/latin-600.css";
+import "@fontsource/inter/latin-700.css";
+import "@fontsource/inter/latin-800.css";
 import { ClientRouter } from "astro:transitions";
 import { SITE } from "../site.config";
 import Icon from "../components/Icon.astro";
+import serifFontUrl from "../assets/fonts/instrument-serif-latin.woff2?url";
 
 interface Props {
+  /** Título completo de la página. */
   title?: string;
   description?: string;
+  /** Ruta relativa a `base` de la imagen social (1200×630). */
   image?: string;
-  canonicalURL?: string;
+  /** `article` para entradas de blog y casos de estudio. */
+  type?: "website" | "article";
+  noindex?: boolean;
+  publishedTime?: Date;
+  modifiedTime?: Date;
 }
 
 const {
   title = SITE.title,
   description = SITE.description,
-  image,
-  canonicalURL = Astro.url.href,
+  image = SITE.ogImage,
+  type = "website",
+  noindex = false,
+  publishedTime,
+  modifiedTime,
 } = Astro.props;
 
-const canonical = new URL(canonicalURL, Astro.site).href;
-const ogImage = image ? new URL(image, Astro.site).href : undefined;
+const base = import.meta.env.BASE_URL;
+const site = Astro.site ?? new URL("https://example.com");
+const canonical = new URL(Astro.url.pathname, site).href;
+const absolute = (path: string) =>
+  new URL(`${base}${path.replace(/^\//, "")}`, site).href;
+const ogImage = absolute(image);
+const ogImageAlt = `${SITE.name} — ${SITE.jobTitle}`;
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: SITE.name,
-  url: SITE.url,
-  jobTitle: "Desarrollador Web",
-  sameAs: [SITE.social.github, SITE.social.linkedin],
-  email: SITE.email,
-  description: SITE.description,
-  knowsAbout: ["Desarrollo Web", "Frontend", "React", "Astro", "UI/UX"],
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${site.origin}#person`,
+      name: SITE.name,
+      url: new URL(base, site).href,
+      jobTitle: SITE.jobTitle,
+      email: `mailto:${SITE.email}`,
+      description: SITE.description,
+      sameAs: [SITE.social.github, SITE.social.linkedin],
+      knowsAbout: SITE.knowsAbout,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${site.origin}#website`,
+      url: new URL(base, site).href,
+      name: SITE.name,
+      description: SITE.description,
+      inLanguage: "es-CR",
+      publisher: { "@id": `${site.origin}#person` },
+    },
+  ],
 };
 ---
 
@@ -43,8 +72,25 @@ const jsonLd = {
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
-    <link rel="icon" type="image/x-icon" href={`${import.meta.env.BASE_URL}favicon.ico`} />
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href={`${base}favicon.ico`}
+      sizes="any"
+    />
+    <link rel="apple-touch-icon" href={`${base}favicon.svg`} />
+    <link rel="manifest" href={`${base}site.webmanifest`} />
+    <link
+      rel="preload"
+      href={serifFontUrl}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang="es" href={canonical} />
     <link rel="alternate" hreflang="x-default" href={canonical} />
@@ -54,35 +100,47 @@ const jsonLd = {
     />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#020617" />
-    <meta
-      name="keywords"
-      content="desarrollador web, portafolio, frontend, react, astro, Bairon Garita, desarrollo web"
-    />
+    <meta name="theme-color" content={SITE.themeColor} />
     <meta name="author" content={SITE.author} />
-    <meta name="robots" content="index, follow" />
+    <meta
+      name="robots"
+      content={noindex
+        ? "noindex, follow"
+        : "index, follow, max-image-preview:large"}
+    />
 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:type" content={type} />
+    <meta property="og:locale" content="es_CR" />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
     {
-      ogImage && (
-        <>
-          <meta property="og:image" content={ogImage} />
-          <meta property="og:image:width" content="1200" />
-          <meta property="og:image:height" content="630" />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:image" content={ogImage} />
-        </>
+      publishedTime && (
+        <meta
+          property="article:published_time"
+          content={publishedTime.toISOString()}
+        />
       )
     }
-    {!ogImage && <meta name="twitter:card" content="summary" />}
+    {
+      modifiedTime && (
+        <meta
+          property="article:modified_time"
+          content={modifiedTime.toISOString()}
+        />
+      )
+    }
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:creator" content={SITE.author} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
     <title>{title}</title>
 
@@ -90,8 +148,21 @@ const jsonLd = {
 
     <ClientRouter />
   </head>
-  <body class="bg-slate-950 text-slate-100 antialiased">
-    <div id="progress-bar" transition:persist class="scroll-progress-bar" aria-hidden="true"></div>
+  <body class="text-paper antialiased">
+    <div class="page-bg" aria-hidden="true">
+      <div class="page-grid"></div>
+      <div class="aurora aurora-1" data-orb></div>
+      <div class="aurora aurora-2" data-orb></div>
+      <div class="aurora aurora-3"></div>
+    </div>
+
+    <div
+      id="progress-bar"
+      transition:persist
+      class="scroll-progress-bar"
+      aria-hidden="true"
+    >
+    </div>
 
     <slot />
 
@@ -107,157 +178,151 @@ const jsonLd = {
       <Icon name="chevronUp" class="h-5 w-5" />
     </button>
 
-    <script type="module">
-      import { animate, stagger } from "motion";
+    <script>
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
 
-      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      // Expo-out: fast start, graceful settle — feels crisper than plain ease-out
-      const EASE = [0.16, 1, 0.3, 1];
-
-      // — Runs once: this module stays alive across view-transition navigations —
-      if (!reduceMotion) {
-        // Subtle accent shift
-        animate(":root", { "--accent-hue": [198, 215, 190, 198] }, { duration: 24, repeat: Infinity, ease: "linear" });
+      function revealNow(el: Element) {
+        const delay = Number(el.getAttribute("data-reveal-delay")) || 0;
+        (el as HTMLElement).style.transitionDelay = `${delay}ms`;
+        el.querySelectorAll("[data-reveal-child]").forEach((child, i) => {
+          (child as HTMLElement).style.transitionDelay =
+            `${delay + 80 + i * 55}ms`;
+        });
+        el.classList.add("is-visible");
       }
 
-      let revealObserver;
-
-      function observeReveals() {
-        revealObserver?.disconnect();
-        if (reduceMotion || !("IntersectionObserver" in window)) return;
-
-        revealObserver = new IntersectionObserver(
-          (entries) => {
-            entries
-              .filter((entry) => entry.isIntersecting)
-              .forEach((entry) => {
-                const el = entry.target;
-                el.dataset.revealed = "true";
-                revealObserver.unobserve(el);
-                const delay = Number(el.dataset.revealDelay) || 0;
-                window.setTimeout(() => {
-                  animate(el, { opacity: [0, 1], y: [16, 0] }, { duration: 0.5, ease: EASE });
-                  const children = el.querySelectorAll("[data-reveal-child]");
-                  if (children.length) {
-                    animate(
-                      children,
-                      { opacity: [0, 1], y: [10, 0] },
-                      { duration: 0.45, delay: stagger(0.06), ease: EASE }
-                    );
-                  }
-                }, delay);
-              });
-          },
-          { rootMargin: "0px 0px -48px" },
+      /** Reveal on scroll with a single IntersectionObserver per page view. */
+      function initReveals() {
+        const targets = document.querySelectorAll(
+          "[data-reveal]:not(.is-visible)",
         );
 
-        document.querySelectorAll("[data-motion-reveal]:not([data-revealed])").forEach((el) => {
-          revealObserver.observe(el);
-        });
+        // Above-the-fold hero content animates on load, staggered.
+        document
+          .querySelectorAll("[data-reveal-hero]:not(.is-visible)")
+          .forEach((el, i) => {
+            const delay = reduceMotion ? 0 : i * 70;
+            (el as HTMLElement).style.transitionDelay = `${delay}ms`;
+            window.setTimeout(() => el.classList.add("is-visible"), delay);
+          });
+
+        if (reduceMotion || !("IntersectionObserver" in window)) {
+          targets.forEach((el) => el.classList.add("is-visible"));
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              revealNow(entry.target);
+              observer.unobserve(entry.target);
+            }
+          },
+          { rootMargin: "0px 0px -40px" },
+        );
+
+        targets.forEach((el) => observer.observe(el));
       }
 
-      // Batch scroll work into one animation frame to avoid repeated layout reads.
-      let scrollTicking = false;
-      const updateScrollState = () => {
-        // Hero parallax: uses the `translate` property so it never fights Motion's transforms
+      let frame = 0;
+      function updateScrollState() {
         if (!reduceMotion) {
           const y = window.scrollY;
           if (y < window.innerHeight * 1.5) {
-            document.querySelectorAll("[data-motion-orb]").forEach((orb, i) => {
-              orb.style.translate = `0 ${Math.round(y * (i % 2 ? -0.05 : 0.08))}px`;
+            document.querySelectorAll("[data-orb]").forEach((orb, i) => {
+              (orb as HTMLElement).style.translate =
+                `0 ${Math.round(y * (i % 2 ? -0.05 : 0.08))}px`;
             });
           }
         }
 
         const bar = document.getElementById("progress-bar");
         if (bar) {
-          const max = document.documentElement.scrollHeight - window.innerHeight;
+          const max =
+            document.documentElement.scrollHeight - window.innerHeight;
           bar.style.transform = `scaleX(${max > 0 ? Math.min(window.scrollY / max, 1) : 0})`;
         }
+
         const btn = document.getElementById("back-to-top");
         if (btn) {
           const visible = window.scrollY > 400;
-          btn.classList.toggle("opacity-0", !visible);
-          btn.classList.toggle("opacity-100", visible);
-          btn.classList.toggle("translate-y-2", !visible);
-          btn.classList.toggle("translate-y-0", visible);
-          btn.classList.toggle("pointer-events-none", !visible);
-          btn.classList.toggle("pointer-events-auto", visible);
+          for (const token of [
+            "opacity-0",
+            "translate-y-2",
+            "pointer-events-none",
+          ]) {
+            btn.classList.toggle(token, !visible);
+          }
+          for (const token of [
+            "opacity-100",
+            "translate-y-0",
+            "pointer-events-auto",
+          ]) {
+            btn.classList.toggle(token, visible);
+          }
           btn.tabIndex = visible ? 0 : -1;
           btn.setAttribute("aria-hidden", String(!visible));
         }
-      };
+      }
 
-      const onScroll = () => {
-        if (scrollTicking) return;
-        scrollTicking = true;
-        window.requestAnimationFrame(() => {
-          scrollTicking = false;
+      function onScroll() {
+        if (frame) return;
+        frame = window.requestAnimationFrame(() => {
+          frame = 0;
           updateScrollState();
         });
-      };
-      window.addEventListener("scroll", onScroll, { passive: true });
-      window.addEventListener("resize", onScroll, { passive: true });
-
-      // Delegated click (survives navigations and persisted nodes)
-      document.addEventListener("click", (e) => {
-        if (!e.target.closest("#back-to-top")) return;
-        window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
-      });
-
-      // Cursor spotlight for interactive cards (fine pointers only)
-      if (!reduceMotion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-        document.addEventListener(
-          "pointermove",
-          (e) => {
-            const card = e.target.closest(".card-spotlight");
-            if (!card) return;
-            const rect = card.getBoundingClientRect();
-            card.style.setProperty("--spot-x", `${e.clientX - rect.left}px`);
-            card.style.setProperty("--spot-y", `${e.clientY - rect.top}px`);
-          },
-          { passive: true }
-        );
       }
 
-      // — Runs once per page view: initial load + after every view transition —
-      function setupPage() {
-        if (document.getElementById("motion-ready")) return;
-        const marker = document.createElement("span");
-        marker.id = "motion-ready";
-        marker.hidden = true;
-        document.body.appendChild(marker);
+      let bound = false;
+      function initPage() {
+        if (!bound) {
+          bound = true;
+          window.addEventListener("scroll", onScroll, { passive: true });
+          window.addEventListener("resize", onScroll, { passive: true });
 
-        document.documentElement.classList.add("motion-ok");
-        observeReveals();
-        onScroll();
-
-        if (reduceMotion) {
-          document
-            .querySelectorAll("[data-motion-hero], [data-motion-reveal], [data-reveal-child]")
-            .forEach((el) => {
-              el.style.opacity = "1";
-              el.dataset.revealed = "true";
+          document.addEventListener("click", (event) => {
+            const target = event.target as Element | null;
+            if (!target?.closest("#back-to-top")) return;
+            window.scrollTo({
+              top: 0,
+              behavior: reduceMotion ? "auto" : "smooth",
             });
-          return;
+          });
+
+          if (
+            !reduceMotion &&
+            window.matchMedia("(hover: hover) and (pointer: fine)").matches
+          ) {
+            document.addEventListener(
+              "pointermove",
+              (event) => {
+                const card = (
+                  event.target as Element | null
+                )?.closest<HTMLElement>(".card-spotlight");
+                if (!card) return;
+                const rect = card.getBoundingClientRect();
+                card.style.setProperty(
+                  "--spot-x",
+                  `${event.clientX - rect.left}px`,
+                );
+                card.style.setProperty(
+                  "--spot-y",
+                  `${event.clientY - rect.top}px`,
+                );
+              },
+              { passive: true },
+            );
+          }
         }
 
-        animate(
-          "[data-motion-orb]",
-          { x: [0, 10, -6, 0], y: [0, -14, 8, 0] },
-          { duration: 16, repeat: Infinity, ease: "ease-in-out" }
-        );
-
-        animate(
-          "[data-motion-hero]",
-          { opacity: [0, 1], y: [14, 0] },
-          { duration: 0.55, delay: stagger(0.07), ease: EASE }
-        );
+        initReveals();
+        onScroll();
       }
 
-      setupPage();
-      document.addEventListener("astro:after-swap", setupPage);
-      document.addEventListener("astro:page-load", setupPage);
+      document.addEventListener("astro:page-load", initPage);
     </script>
   </body>
 </html>

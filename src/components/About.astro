@@ -8,14 +8,14 @@ const experience = [
     company: "Independiente",
     period: "2023 — Presente",
     description:
-      "Desarrollo de sitios web y aplicaciones para clientes locales, enfocándome en rendimiento, accesibilidad y diseño moderno.",
+      "Sitios y aplicaciones para clientes locales, con foco en rendimiento, accesibilidad y diseño moderno.",
   },
   {
     role: "Desarrollador Full-Stack",
     company: "Proyectos académicos",
     period: "2022 — 2023",
     description:
-      "Construcción de aplicaciones web completas con stacks como ASP.NET Core, React y PHP, aplicando buenas prácticas de desarrollo.",
+      "Aplicaciones web completas con ASP.NET Core, React y PHP, aplicando buenas prácticas de desarrollo.",
   },
 ];
 
@@ -24,8 +24,16 @@ const education = [
     degree: "Ingeniería en Sistemas",
     school: "Universidad",
     period: "En curso",
-    description: "Formación en desarrollo de software, bases de datos, redes y gestión de proyectos tecnológicos.",
+    description:
+      "Formación en desarrollo de software, bases de datos, redes y gestión de proyectos.",
   },
+];
+
+const now = [
+  { label: "Enfoque", value: "Frontend y full-stack" },
+  { label: "Disponibilidad", value: "Freelance y colaboraciones" },
+  { label: "Ubicación", value: "Costa Rica · GMT-6" },
+  { label: "Idiomas", value: "Español · Inglés técnico" },
 ];
 ---
 
@@ -33,97 +41,189 @@ const education = [
   <div class="container-page">
     <SectionHeader
       id="about-heading"
+      index="01"
       eyebrow="Sobre mí"
-      title="Conóceme un poco más"
+      title="Diseño con criterio,"
+      accent="código con intención"
       description="Desarrollador web apasionado por crear experiencias digitales que combinan buen diseño con código limpio y funcional."
     />
 
-    <div class="grid gap-6 lg:grid-cols-2">
+    <div class="grid gap-4 sm:gap-5 lg:grid-cols-12">
       <!-- Biografía -->
+      <div data-reveal class="panel p-6 sm:p-9 lg:col-span-7">
+        <div class="mb-5 flex items-center gap-3">
+          <span
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-mint/10 text-mint"
+          >
+            <Icon name="user" class="h-4 w-4" />
+          </span>
+          <h3
+            class="font-mono text-[11px] tracking-[0.22em] text-mint uppercase"
+          >
+            Perfil
+          </h3>
+        </div>
+
+        <div class="space-y-4 text-[15px] leading-7 text-slate-300">
+          <p>
+            Soy <strong class="font-semibold text-white">Bairon Garita</strong>,
+            desarrollador web de Costa Rica. Me enfoco en construir interfaces
+            limpias, accesibles y de alto rendimiento: productos que se sienten
+            rápidos y se entienden a la primera.
+          </p>
+          <p>
+            Mi stack principal incluye <strong class="font-semibold text-white"
+              >Astro</strong
+            >,
+            <strong class="font-semibold text-white">React</strong>,
+            <strong class="font-semibold text-white">TypeScript</strong> y
+            <strong class="font-semibold text-white">Tailwind CSS</strong>, con
+            backend en ASP.NET Core y PHP cuando el proyecto lo pide.
+          </p>
+        </div>
+
+        <blockquote class="mt-7 border-l-2 border-mint/40 pl-5">
+          <p
+            class="serif-accent text-xl leading-snug text-slate-100 sm:text-2xl"
+          >
+            “El detalle no es un extra: es la diferencia entre algo que funciona
+            y algo que se disfruta.”
+          </p>
+        </blockquote>
+      </div>
+
+      <!-- Ficha rápida -->
       <div
-        data-motion-reveal
-        class="card p-6 sm:p-8"
+        data-reveal
+        data-reveal-delay="90"
+        class="panel relative overflow-hidden p-6 sm:p-9 lg:col-span-5"
       >
-        <div class="flex items-center gap-3 mb-4">
-          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-sky-500/10">
-            <Icon name="user" class="h-5 w-5 text-sky-400" />
-          </div>
-          <h3 class="text-lg font-semibold text-white">Biografía</h3>
+        <div
+          class="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-sky/20 blur-3xl"
+          aria-hidden="true"
+        >
         </div>
-        <div class="space-y-3 text-sm leading-7 text-slate-300">
-          <p>
-            Soy <strong class="text-white">Bairon Garita</strong>, desarrollador web de Costa Rica con experiencia
-            en la creación de sitios y aplicaciones web modernas. Me enfoco en construir interfaces limpias,
-            accesibles y de alto rendimiento.
-          </p>
-          <p>
-            Mi stack principal incluye tecnologías como <strong class="text-white">React</strong>,
-            <strong class="text-white">Astro</strong>, <strong class="text-white">Tailwind CSS</strong>,
-            <strong class="text-white">ASP.NET Core</strong> y <strong class="text-white">PHP</strong>,
-            aunque siempre estoy abierto a aprender nuevas herramientas y mejorar mis habilidades.
-          </p>
-          <p>
-            Cuando no estoy programando, me gusta explorar nuevas tecnologías, contribuir a proyectos
-            de código abierto y compartir conocimiento con la comunidad.
-          </p>
+
+        <div class="mb-5 flex items-center gap-3">
+          <span
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky/10 text-sky"
+          >
+            <Icon name="briefcase" class="h-4 w-4" />
+          </span>
+          <h3
+            class="font-mono text-[11px] tracking-[0.22em] text-sky uppercase"
+          >
+            Ahora mismo
+          </h3>
         </div>
+
+        <dl class="divide-y divide-white/8">
+          {
+            now.map((item) => (
+              <div class="flex items-baseline justify-between gap-4 py-3 first:pt-0">
+                <dt class="font-mono text-[11px] tracking-[0.18em] text-slate-400 uppercase">
+                  {item.label}
+                </dt>
+                <dd class="text-right text-sm font-medium text-slate-200">
+                  {item.value}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        <a
+          href={`${import.meta.env.BASE_URL}#contacto`}
+          class="link-underline mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-sky hover:text-white"
+        >
+          Trabajemos juntos
+          <Icon name="arrowRight" class="icon-nudge h-4 w-4" />
+        </a>
+      </div>
+
+      <!-- Experiencia -->
+      <div
+        data-reveal
+        data-reveal-delay="60"
+        class="panel p-6 sm:p-9 lg:col-span-7"
+      >
+        <div class="mb-6 flex items-center gap-3">
+          <span
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-mint/10 text-mint"
+          >
+            <Icon name="book" class="h-4 w-4" />
+          </span>
+          <h3
+            class="font-mono text-[11px] tracking-[0.22em] text-mint uppercase"
+          >
+            Experiencia
+          </h3>
+        </div>
+
+        <ol class="space-y-6">
+          {
+            experience.map((item) => (
+              <li class="relative pl-7 before:absolute before:top-2 before:left-[5px] before:h-[calc(100%+1.5rem)] before:w-px before:bg-gradient-to-b before:from-mint/50 before:to-transparent last:before:hidden">
+                <span
+                  class="absolute top-1.5 left-0 h-2.5 w-2.5 rounded-full bg-mint ring-4 ring-mint/15"
+                  aria-hidden="true"
+                />
+                <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+                  <p class="font-medium text-white">{item.role}</p>
+                  <span class="font-mono text-[11px] tracking-[0.18em] text-slate-400 uppercase">
+                    {item.period}
+                  </span>
+                </div>
+                <p class="text-sm text-sky">{item.company}</p>
+                <p class="mt-1.5 text-sm leading-6 text-slate-300">
+                  {item.description}
+                </p>
+              </li>
+            ))
+          }
+        </ol>
       </div>
 
       <!-- Educación -->
       <div
-        data-motion-reveal
-        data-reveal-delay="90"
-        class="card p-6 sm:p-8"
+        data-reveal
+        data-reveal-delay="120"
+        class="panel p-6 sm:p-9 lg:col-span-5"
       >
-        <div class="flex items-center gap-3 mb-4">
-          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-500/10">
-            <Icon name="book" class="h-5 w-5 text-violet-400" />
-          </div>
-          <h3 class="text-lg font-semibold text-white">Educación</h3>
+        <div class="mb-6 flex items-center gap-3">
+          <span
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky/10 text-sky"
+          >
+            <Icon name="book" class="h-4 w-4" />
+          </span>
+          <h3
+            class="font-mono text-[11px] tracking-[0.22em] text-sky uppercase"
+          >
+            Educación
+          </h3>
         </div>
-        <div class="space-y-4">
-          {education.map((item) => (
-            <div>
-              <div class="flex items-start justify-between gap-2">
-                <div>
-                  <p class="text-sm font-medium text-white">{item.degree}</p>
-                  <p class="text-sm text-slate-400">{item.school}</p>
-                </div>
-                <span class="chip tabular-nums text-slate-400 shrink-0">{item.period}</span>
-              </div>
-              <p class="mt-1 text-sm text-slate-300">{item.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
 
-    <!-- Experiencia -->
-    <div
-      data-motion-reveal
-      data-reveal-delay="180"
-      class="mt-6 card p-6 sm:p-8"
-    >
-      <div class="flex items-center gap-3 mb-6">
-        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
-          <Icon name="briefcase" class="h-5 w-5 text-emerald-400" />
-        </div>
-        <h3 class="text-lg font-semibold text-white">Experiencia</h3>
-      </div>
-      <div class="space-y-6">
-        {experience.map((item, index) => (
-          <div class="relative pl-6 before:absolute before:left-1.5 before:top-2 before:h-full before:w-px before:bg-slate-700">
-            <div class="absolute left-0 top-1.5 h-3 w-3 rounded-full bg-emerald-400 ring-4 ring-slate-950" />
-            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-              <div>
-                <p class="text-sm font-medium text-white">{item.role}</p>
-                <p class="text-sm text-sky-400">{item.company}</p>
+        {
+          education.map((item) => (
+            <div>
+              <div class="flex items-baseline justify-between gap-3">
+                <p class="font-medium text-white">{item.degree}</p>
+                <span class="font-mono text-[11px] tracking-[0.18em] text-slate-400 uppercase">
+                  {item.period}
+                </span>
               </div>
-              <span class="chip tabular-nums text-slate-400 mt-1 shrink-0 sm:mt-0">{item.period}</span>
+              <p class="text-sm text-sky">{item.school}</p>
+              <p class="mt-1.5 text-sm leading-6 text-slate-300">
+                {item.description}
+              </p>
             </div>
-            <p class="mt-2 text-sm text-slate-300">{item.description}</p>
-          </div>
-        ))}
+          ))
+        }
+
+        <div class="mt-6 flex flex-wrap gap-2">
+          <span class="chip">Aprendizaje continuo</span>
+          <span class="chip">Código abierto</span>
+        </div>
       </div>
     </div>
   </div>

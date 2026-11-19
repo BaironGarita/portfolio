@@ -4,7 +4,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
-// URL de GitHub Pages para el repositorio personal
+// Fuente única de verdad para la URL del sitio (GitHub Pages, proyecto /portafolio).
 const site = "https://bairongarita.github.io";
 const base = "/portafolio";
 
@@ -12,7 +12,13 @@ export default defineConfig({
   site,
   base,
   trailingSlash: "always",
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      // No se indexan páginas de error ni el robots.txt generado.
+      filter: (page) => !page.includes("/404"),
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },

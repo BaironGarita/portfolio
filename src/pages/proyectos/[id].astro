@@ -1,0 +1,137 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import Icon from "../../components/Icon.astro";
+import { SITE } from "../../site.config";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects", ({ data }) => !data.draft);
+  return projects.map((project) => ({
+    params: { id: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const base = import.meta.env.BASE_URL;
+
+const year = project.data.pubDate.getFullYear();
+---
+
+<BaseLayout
+  title={`${project.data.title} — Caso de estudio | ${SITE.name}`}
+  description={project.data.description}
+  type="article"
+  publishedTime={project.data.pubDate}
+  modifiedTime={project.data.updatedDate}
+>
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      name: project.data.title,
+      description: project.data.description,
+      dateCreated: project.data.pubDate.toISOString(),
+      dateModified: (
+        project.data.updatedDate ?? project.data.pubDate
+      ).toISOString(),
+      author: { "@type": "Person", name: SITE.name },
+      keywords: project.data.stack.join(", "),
+      url: new URL(Astro.url.pathname, Astro.site).href,
+    })}
+  />
+  <Header />
+  <main id="main-content">
+    <article class="section">
+      <div class="container-page max-w-3xl">
+        <a
+          href={`${base}#proyectos`}
+          class="inline-flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-sky"
+        >
+          <Icon name="arrowLeft" class="h-4 w-4" />
+          Volver a proyectos
+        </a>
+
+        <header class="mt-6 mb-8 sm:mb-12">
+          <div class="mb-4 flex flex-wrap items-center gap-2">
+            <span class="chip tabular-nums text-slate-300">{year}</span>
+            {
+              project.data.status === "live" ? (
+                <span class="chip chip-live">En vivo</span>
+              ) : (
+                <span class="chip chip-muted">Código abierto</span>
+              )
+            }
+            {project.data.role && <span class="chip">{project.data.role}</span>}
+          </div>
+
+          <h1 class="display-lg text-white">{project.data.title}</h1>
+          <p class="mt-5 text-base leading-7 text-slate-300 sm:text-lg">
+            {project.data.description}
+          </p>
+
+          <ul
+            class="mt-5 flex flex-wrap gap-2"
+            aria-label="Tecnologías del proyecto"
+          >
+            {
+              project.data.stack.map((tech) => (
+                <li class="chip chip-hover">{tech}</li>
+              ))
+            }
+          </ul>
+
+          <div class="mt-6 flex flex-col gap-2 sm:flex-row">
+            {
+              project.data.url && (
+                <a
+                  href={project.data.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn btn-primary w-full sm:w-auto"
+                >
+                  Visitar sitio
+                  <Icon name="external" class="icon-nudge h-4 w-4" />
+                  <span class="sr-only"> (se abre en una pestaña nueva)</span>
+                </a>
+              )
+            }
+            {
+              project.data.repo && (
+                <a
+                  href={project.data.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn btn-secondary w-full sm:w-auto"
+                >
+                  <Icon name="github" class="icon-nudge h-4 w-4" />
+                  Ver código
+                  <span class="sr-only"> (se abre en una pestaña nueva)</span>
+                </a>
+              )
+            }
+          </div>
+        </header>
+
+        <div class="prose prose-invert prose-slate max-w-none">
+          <Content />
+        </div>
+
+        <footer class="mt-12 border-t border-slate-800/70 pt-6">
+          <a
+            href={`${base}#contacto`}
+            class="link-underline inline-flex items-center gap-1.5 text-sm font-medium text-sky hover:text-white"
+          >
+            ¿Tienes un proyecto similar? Hablemos
+            <Icon name="arrowRight" class="icon-nudge h-4 w-4" />
+          </a>
+        </footer>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>

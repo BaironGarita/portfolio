@@ -3,14 +3,44 @@ interface Props {
   id: string;
   eyebrow: string;
   title: string;
+  /** Palabra o frase final que se pinta en serif itálica. */
+  accent?: string;
   description?: string;
+  /** Índice editorial mostrado a la derecha, p. ej. "02". */
+  index?: string;
 }
 
-const { id, eyebrow, title, description } = Astro.props;
+const { id, eyebrow, title, accent, description, index } = Astro.props;
 ---
 
-<div data-motion-reveal data-reveal-stagger class="section-header">
-  <p data-reveal-child class="section-eyebrow">{eyebrow}</p>
-  <h2 data-reveal-child id={id} class="section-title">{title}</h2>
-  {description && <p data-reveal-child class="section-desc">{description}</p>}
+<div data-reveal class="mb-12 sm:mb-16">
+  <div
+    class="flex items-end justify-between gap-6 border-b border-white/10 pb-4"
+  >
+    <p data-reveal-child class="eyebrow">{eyebrow}</p>
+    {
+      index && (
+        <span
+          data-reveal-child
+          class="font-mono text-xs tracking-[0.3em] text-slate-400 tabular-nums"
+          aria-hidden="true"
+        >
+          {index}
+        </span>
+      )
+    }
+  </div>
+
+  <h2 data-reveal-child id={id} class="section-title mt-6">
+    {title}
+    {accent && <span class="serif-accent gradient-text"> {accent}</span>}
+  </h2>
+
+  {
+    description && (
+      <p data-reveal-child class="section-desc">
+        {description}
+      </p>
+    )
+  }
 </div>

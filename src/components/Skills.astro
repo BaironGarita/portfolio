@@ -1,66 +1,58 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
 import Icon from "./Icon.astro";
-
-const skillGroups = [
-  {
-    title: "Frontend",
-    icon: "code" as const,
-    accent: "from-cyan-400 to-blue-500",
-    skills: ["HTML/CSS", "JavaScript", "TypeScript", "React", "Astro", "Tailwind CSS"],
-  },
-  {
-    title: "Backend",
-    icon: "server" as const,
-    accent: "from-violet-400 to-purple-500",
-    skills: ["Node.js", "PostgreSQL", "REST APIs", "Git", "ASP.NET Core"],
-  },
-  {
-    title: "Herramientas",
-    icon: "tools" as const,
-    accent: "from-emerald-400 to-teal-500",
-    skills: ["VS Code", "Docker", "Linux", "CI/CD"],
-  },
-];
+import { skillGroups } from "../data/skills";
 ---
 
-<section id="habilidades" class="section relative overflow-hidden" aria-labelledby="habilidades-heading">
-  <div
-    class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_40%,rgba(56,189,248,0.06),transparent_55%)]"
-    aria-hidden="true"
-  >
-  </div>
-
+<section
+  id="habilidades"
+  class="section relative"
+  aria-labelledby="habilidades-heading"
+>
   <div class="container-page">
     <SectionHeader
       id="habilidades-heading"
+      index="03"
       eyebrow="Stack"
-      title="Habilidades"
-      description="Tecnologías y herramientas que utilizo para construir interfaces y productos sólidos."
+      title="Herramientas con las que"
+      accent="construyo"
+      description="Tecnologías y prácticas que utilizo para llevar una idea desde el wireframe hasta producción."
     />
 
-    <div class="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+    <div class="grid gap-4 sm:gap-5 md:grid-cols-3">
       {
         skillGroups.map((group, index) => (
           <div
-            data-motion-reveal
-            data-reveal-delay={String(index * 100)}
-            class="card card-interactive card-spotlight p-5 sm:p-6"
+            data-reveal
+            data-reveal-delay={String(index * 90)}
+            class="panel panel-hover card-spotlight group relative overflow-hidden p-6 sm:p-7"
           >
-            <div class="mb-4 flex items-center gap-3" data-reveal-child>
+            <div
+              class={`pointer-events-none absolute -top-20 -right-20 h-40 w-40 rounded-full bg-gradient-to-br ${group.accent} opacity-[0.18] blur-3xl transition-opacity duration-500 group-hover:opacity-30`}
+              aria-hidden="true"
+            />
+
+            <div class="relative mb-6 flex items-center justify-between">
               <div
-                class={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${group.accent} text-white shadow-md`}
+                class={`flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br ${group.accent} text-white shadow-lg shadow-sky-950/50`}
               >
-                <Icon name={group.icon} class="h-4 w-4" />
+                <Icon name={group.icon} class="h-5 w-5" />
               </div>
-              <h3 class="text-sm font-semibold tracking-[0.15em] text-white uppercase">{group.title}</h3>
+              <span class="font-mono text-[11px] tracking-[0.3em] text-slate-400">
+                {String(index + 1).padStart(2, "0")}
+              </span>
             </div>
 
-            <ul class="flex flex-wrap gap-2" aria-label={group.title}>
+            <h3 class="relative text-lg font-semibold tracking-tight text-white">
+              {group.title}
+            </h3>
+
+            <ul
+              class="relative mt-4 flex flex-wrap gap-2"
+              aria-label={group.title}
+            >
               {group.skills.map((skill) => (
-                <li class="chip chip-hover" data-reveal-child>
-                  {skill}
-                </li>
+                <li class="chip chip-hover">{skill}</li>
               ))}
             </ul>
           </div>

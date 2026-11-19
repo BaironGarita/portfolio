@@ -11,7 +11,9 @@
     "dev:fg": "astro dev",
     "build": "astro build",
     "check": "astro check",
-    "format:check": "prettier --check .prettierrc.json package.json astro.config.mjs src/site.config.ts src/pages/blog/**/*.astro",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "preview": "astro preview",
     "astro": "astro"
   },

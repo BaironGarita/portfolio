@@ -10,7 +10,7 @@ const channels = [
     icon: "mail" as const,
     external: false,
     copy: true,
-    accent: "from-cyan-400 to-blue-500",
+    accent: "from-mint to-sky",
   },
   {
     label: "GitHub",
@@ -26,29 +26,40 @@ const channels = [
     href: SITE.social.linkedin,
     icon: "linkedin" as const,
     external: true,
-    accent: "from-blue-500 to-blue-700",
+    accent: "from-sky to-sky-600",
   },
 ];
 ---
 
-<section id="contacto" class="section relative overflow-hidden" aria-labelledby="contacto-heading">
+<section
+  id="contacto"
+  class="section relative overflow-hidden"
+  aria-labelledby="contacto-heading"
+>
   <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-    <div class="absolute top-0 left-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/3 rounded-full bg-blue-500/10 blur-3xl"></div>
+    <div
+      class="absolute top-0 left-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/3 rounded-full bg-mint/10 blur-3xl"
+    >
+    </div>
   </div>
 
   <div class="container-page">
     <div
-      data-motion-reveal
-      class="grid gap-8 rounded-3xl border border-sky-400/15 bg-gradient-to-br from-slate-900 via-slate-950 to-blue-950/70 p-5 sm:gap-10 sm:p-8 lg:grid-cols-[0.95fr_1.05fr] lg:p-10"
+      data-reveal
+      class="panel grid gap-10 p-6 sm:p-9 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14 lg:p-12"
     >
       <div>
-        <p class="section-eyebrow">Contacto</p>
-        <h2 id="contacto-heading" class="section-title">¿Tienes una idea o proyecto en mente?</h2>
+        <p class="eyebrow">04 — Contacto</p>
+        <h2 id="contacto-heading" class="display-lg mt-6 text-white">
+          ¿Tienes una idea?<br />
+          <span class="serif-accent gradient-text pb-1">Hagámosla real.</span>
+        </h2>
         <p class="section-desc">
-          Cuéntame sobre él y lo convertimos en una experiencia clara, rápida y útil.
+          Cuéntame qué necesitas y te respondo con un plan claro: alcance,
+          tiempos y siguiente paso.
         </p>
 
-        <div class="mt-6 space-y-2.5 sm:mt-8 sm:space-y-3">
+        <div class="mt-8 space-y-2.5 sm:space-y-3">
           {
             channels.map((ch) => {
               const rowInner = (
@@ -60,14 +71,21 @@ const channels = [
                     <Icon name={ch.icon} class="h-4 w-4" />
                   </div>
                   <div class="min-w-0">
-                    <p class="text-xs font-medium text-slate-400">{ch.label}</p>
-                    <p class="truncate text-sm font-medium text-slate-200 group-hover:text-white">{ch.value}</p>
+                    <p class="font-mono text-[11px] tracking-[0.2em] text-slate-400 uppercase">
+                      {ch.label}
+                    </p>
+                    <p class="truncate text-sm font-medium text-slate-200 group-hover:text-white">
+                      {ch.value}
+                    </p>
                   </div>
                 </>
               );
               return ch.copy ? (
                 <div class="card-link flex items-center gap-3 p-3.5 sm:p-4">
-                  <a href={ch.href} class="group flex min-w-0 flex-1 items-center gap-3">
+                  <a
+                    href={ch.href}
+                    class="group flex min-w-0 flex-1 items-center gap-3"
+                  >
                     {rowInner}
                   </a>
                   <button
@@ -77,8 +95,12 @@ const channels = [
                     aria-label="Copiar email"
                     title="Copiar email"
                   >
-                    <span data-copy-icon class="contents"><Icon name="copy" class="h-4 w-4" /></span>
-                    <span data-copy-ok class="hidden"><Icon name="check" class="h-4 w-4 text-emerald-400" /></span>
+                    <span data-copy-icon class="contents">
+                      <Icon name="copy" class="h-4 w-4" />
+                    </span>
+                    <span data-copy-ok class="hidden">
+                      <Icon name="check" class="h-4 w-4 text-mint" />
+                    </span>
                   </button>
                 </div>
               ) : (
@@ -89,24 +111,33 @@ const channels = [
                   class="card-link group flex items-center gap-3 p-3.5 sm:p-4"
                 >
                   {rowInner}
+                  <span class="sr-only"> (se abre en una pestaña nueva)</span>
                 </a>
               );
             })
           }
         </div>
 
-        <p class="mt-5 text-xs leading-relaxed text-slate-500 sm:mt-6">
+        <p class="mt-5 text-xs leading-relaxed text-slate-400 sm:mt-6">
           Tiempo de respuesta habitual: 24–48 h en días laborables.
         </p>
       </div>
 
-      <div class="rounded-2xl border border-slate-700/50 bg-white/[0.02] p-5 sm:p-7">
-        <h3 class="mb-1 text-lg font-semibold text-white">Envíame un mensaje</h3>
+      <div class="rounded-2xl border border-white/10 bg-night/50 p-5 sm:p-7">
+        <h3 class="mb-1 text-lg font-semibold tracking-tight text-white">
+          Envíame un mensaje
+        </h3>
         <p class="mb-5 text-sm text-slate-400 sm:mb-6">
-          Completa el formulario y se abrirá tu cliente de correo con el mensaje listo.
+          Completa el formulario y se abrirá tu cliente de correo con el mensaje
+          listo.
         </p>
 
-        <form id="contact-form" class="space-y-4" novalidate data-email={SITE.email}>
+        <form
+          id="contact-form"
+          class="space-y-4"
+          novalidate
+          data-email={SITE.email}
+        >
           <div>
             <label for="form-name" class="field-label">
               Nombre <span class="text-red-400" aria-hidden="true">*</span>
@@ -122,7 +153,9 @@ const channels = [
               aria-describedby="name-error"
               class="field"
             />
-            <p id="name-error" class="field-error" hidden role="alert">El nombre es obligatorio</p>
+            <p id="name-error" class="field-error" hidden role="alert">
+              El nombre es obligatorio
+            </p>
           </div>
 
           <div>
@@ -141,7 +174,9 @@ const channels = [
               aria-describedby="email-error"
               class="field"
             />
-            <p id="email-error" class="field-error" hidden role="alert">Ingresa un email válido</p>
+            <p id="email-error" class="field-error" hidden role="alert">
+              Ingresa un email válido
+            </p>
           </div>
 
           <div>
@@ -158,7 +193,9 @@ const channels = [
               aria-describedby="subject-error"
               class="field"
             />
-            <p id="subject-error" class="field-error" hidden role="alert">El asunto es obligatorio</p>
+            <p id="subject-error" class="field-error" hidden role="alert">
+              El asunto es obligatorio
+            </p>
           </div>
 
           <div>
@@ -166,7 +203,10 @@ const channels = [
               <label for="form-message" class="field-label mb-0">
                 Mensaje <span class="text-red-400" aria-hidden="true">*</span>
               </label>
-              <span id="message-count" class="text-xs text-slate-500 tabular-nums" aria-live="polite">0 / 10 mín.</span>
+              <span
+                id="message-count"
+                class="text-xs text-slate-400 tabular-nums">0 / 10 mín.</span
+              >
             </div>
             <textarea
               id="form-message"
@@ -177,26 +217,43 @@ const channels = [
               placeholder="Cuéntame sobre tu proyecto..."
               aria-required="true"
               aria-describedby="message-error message-count"
-              class="field min-h-[6.5rem] resize-y"
-            ></textarea>
+              class="field min-h-[6.5rem] resize-y"></textarea>
             <p id="message-error" class="field-error" hidden role="alert">
               El mensaje debe tener al menos 10 caracteres
             </p>
           </div>
 
-          <button id="form-submit" type="submit" class="btn btn-primary btn-block">
-            <span id="submit-text">Preparar mensaje</span>
+          <p class="text-xs leading-relaxed text-slate-400">
+            El formulario no guarda datos: prepara el mensaje y abre tu
+            aplicación de correo para que lo envíes tú.
+          </p>
+
+          <button
+            id="form-submit"
+            type="submit"
+            class="btn btn-primary btn-block"
+          >
+            <span id="submit-text">Abrir en mi correo</span>
             <Icon name="arrowRight" class="icon-nudge h-4 w-4" />
           </button>
 
           <div
             id="form-success"
-            class="hidden items-center gap-3 rounded-xl border border-emerald-400/20 bg-emerald-400/5 px-4 py-3 text-sm text-emerald-200"
+            class="hidden items-start gap-3 rounded-xl border border-mint/20 bg-mint/5 px-4 py-3 text-sm text-mint"
             role="status"
             aria-live="polite"
           >
-            <Icon name="check" class="h-5 w-5 shrink-0 text-emerald-400" />
-            <span>Se abrió tu cliente de correo. Confirma el envío y te responderé pronto.</span>
+            <Icon name="check" class="mt-0.5 h-5 w-5 shrink-0 text-mint" />
+            <span>
+              Abrimos tu cliente de correo con el mensaje listo. Si no se abrió,
+              escríbeme directamente a
+              <a
+                href={`mailto:${SITE.email}`}
+                class="font-medium underline underline-offset-2 hover:text-white"
+              >
+                {SITE.email}
+              </a>.
+            </span>
           </div>
         </form>
       </div>
@@ -234,7 +291,6 @@ const channels = [
 
     const messageCount = document.getElementById("message-count");
     const successMsg = document.getElementById("form-success");
-    let successTimer = 0;
 
     function setInvalid(input, error, invalid) {
       if (!input || !error) return;
@@ -253,9 +309,10 @@ const channels = [
     fields.message.input?.addEventListener("input", () => {
       const len = fields.message.input.value.trim().length;
       if (!messageCount) return;
-      messageCount.textContent = len < 10 ? `${len} / 10 mín.` : `${len} caracteres`;
-      messageCount.classList.toggle("text-emerald-400/80", len >= 10);
-      messageCount.classList.toggle("text-slate-500", len < 10);
+      messageCount.textContent =
+        len < 10 ? `${len} / 10 mín.` : `${len} caracteres`;
+      messageCount.classList.toggle("text-mint/80", len >= 10);
+      messageCount.classList.toggle("text-slate-400", len < 10);
     });
 
     Object.values(fields).forEach((field) => {
@@ -272,7 +329,9 @@ const channels = [
 
       const results = Object.values(fields).map(validateField);
       if (results.some((ok) => !ok)) {
-        const first = Object.values(fields).find((f) => f.input?.getAttribute("aria-invalid") === "true");
+        const first = Object.values(fields).find(
+          (f) => f.input?.getAttribute("aria-invalid") === "true",
+        );
         first?.input?.focus();
         // Shake the first invalid field so the problem is impossible to miss
         if (first?.input) {
@@ -290,31 +349,25 @@ const channels = [
       const ownerEmail = form.getAttribute("data-email") || "";
 
       const mailto = `mailto:${ownerEmail}?subject=${encodeURIComponent(`[Portfolio] ${subject}`)}&body=${encodeURIComponent(
-        `Nombre: ${name}\nEmail: ${email}\n\n${message}`
+        `Nombre: ${name}\nEmail: ${email}\n\n${message}`,
       )}`;
 
+      // The form is a mailto composer, not a stored submission: keep the values so
+      // the user can retry, and show a persistent status with a direct fallback.
       window.location.href = mailto;
 
-      form.reset();
-      if (messageCount) messageCount.textContent = "0 / 10 mín.";
       if (successMsg) {
-        window.clearTimeout(successTimer);
-        successMsg.classList.remove("hidden", "leaving");
-        successMsg.classList.add("flex", "enter-up");
-        successTimer = window.setTimeout(() => {
-          successMsg.classList.remove("enter-up");
-          successMsg.classList.add("leaving");
-          successTimer = window.setTimeout(() => {
-            successMsg.classList.add("hidden");
-            successMsg.classList.remove("flex", "leaving");
-          }, 300);
-        }, 4700);
+        successMsg.classList.remove("hidden");
+        successMsg.classList.add("flex");
       }
     });
 
     // Clean up the shake class once it has played
     form.addEventListener("animationend", (e) => {
-      if (e.target instanceof HTMLElement && e.target.classList.contains("shake")) {
+      if (
+        e.target instanceof HTMLElement &&
+        e.target.classList.contains("shake")
+      ) {
         e.target.classList.remove("shake");
       }
     });
@@ -345,21 +398,9 @@ const channels = [
           await navigator.clipboard.writeText(email);
           showCopied();
         } catch {
-          // Fallback for older browsers / non-secure contexts
-          const ta = document.createElement("textarea");
-          ta.value = email;
-          ta.setAttribute("readonly", "");
-          ta.style.position = "fixed";
-          ta.style.opacity = "0";
-          document.body.appendChild(ta);
-          ta.select();
-          try {
-            document.execCommand("copy");
-            showCopied();
-          } catch {
-            window.location.href = `mailto:${email}`;
-          }
-          ta.remove();
+          // Sin Clipboard API (contexto no seguro o navegador antiguo) el
+          // enlace mailto del propio canal sigue siendo la vía directa.
+          window.location.href = `mailto:${email}`;
         }
       });
     }

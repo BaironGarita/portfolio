@@ -30,6 +30,9 @@ const formattedDate = (date: Date) =>
 <BaseLayout
   title={`${post.data.title} — ${SITE.name}`}
   description={post.data.description}
+  type="article"
+  publishedTime={post.data.pubDate}
+  modifiedTime={post.data.updatedDate}
 >
   <script
     type="application/ld+json"
@@ -38,16 +41,19 @@ const formattedDate = (date: Date) =>
       "@type": "BlogPosting",
       headline: post.data.title,
       description: post.data.description,
+      inLanguage: "es-CR",
       datePublished: post.data.pubDate.toISOString(),
+      dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
+      mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).href,
       author: {
         "@type": "Person",
         name: SITE.name,
-        url: SITE.url,
+        url: new URL(import.meta.env.BASE_URL, Astro.site).href,
       },
       publisher: {
         "@type": "Person",
         name: SITE.name,
-        url: SITE.url,
+        url: new URL(import.meta.env.BASE_URL, Astro.site).href,
       },
     })}
   />
@@ -59,7 +65,7 @@ const formattedDate = (date: Date) =>
           <div class="mb-4 flex flex-wrap items-center gap-2">
             <a
               href={`${import.meta.env.BASE_URL}blog/`}
-              class="inline-flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-sky-300"
+              class="inline-flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-sky"
             >
               <Icon name="arrowLeft" class="h-4 w-4" />
               Volver al blog
@@ -80,11 +86,11 @@ const formattedDate = (date: Date) =>
             }
           </div>
 
-          <h1 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+          <h1 class="display-lg text-white">
             {post.data.title}
           </h1>
 
-          <p class="mt-4 text-base leading-7 text-slate-300">
+          <p class="mt-5 text-base leading-7 text-slate-300 sm:text-lg">
             {post.data.description}
           </p>
         </div>

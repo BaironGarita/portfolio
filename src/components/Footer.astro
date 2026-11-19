@@ -2,32 +2,62 @@
 import { SITE } from "../site.config";
 import Icon from "./Icon.astro";
 
+const base = import.meta.env.BASE_URL;
 const year = new Date().getFullYear();
 ---
 
-<footer transition:persist class="border-t border-slate-800/70 bg-slate-950/40" role="contentinfo">
-  <div class="container-page py-8 sm:py-10">
-    <div class="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
+<footer
+  transition:persist
+  class="relative overflow-hidden border-t border-white/10"
+  role="contentinfo"
+>
+  <div
+    class="pointer-events-none absolute inset-x-0 -bottom-40 h-80 bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.12),transparent_65%)]"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="container-page relative pt-14 pb-10 sm:pt-16">
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr]">
       <div class="max-w-xs">
-        <a href="#hero" class="text-base font-semibold tracking-tight text-white">
-          Bairon<span class="text-gradient-animate bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 bg-clip-text text-transparent"
-            >.Dev</span
+        <a
+          href={`${base}#hero`}
+          class="group inline-flex items-center gap-2.5 text-white"
+        >
+          <span
+            class="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-mint via-mint to-sky text-sm font-bold text-night shadow-lg shadow-mint/20"
+            aria-hidden="true">B</span
           >
+          <span class="text-base font-semibold tracking-tight">
+            Bairon<span class="gradient-text">.Dev</span>
+          </span>
         </a>
-        <p class="mt-2 text-sm leading-relaxed text-slate-400">
-          Desarrollador web enfocado en interfaces limpias y experiencias útiles.
+        <p class="mt-4 text-sm leading-relaxed text-slate-400">
+          Desarrollador web en Costa Rica. Interfaces limpias, accesibles y
+          rápidas.
+        </p>
+        <p
+          class="mt-4 inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.18em] text-mint uppercase"
+        >
+          <span class="h-1.5 w-1.5 rounded-full bg-mint" aria-hidden="true"
+          ></span>
+          Disponible para proyectos
         </p>
       </div>
 
       <nav aria-label="Pie de página">
-        <p class="mb-3 text-xs font-semibold tracking-[0.2em] text-slate-500 uppercase">Navegación</p>
-        <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        <p
+          class="mb-4 font-mono text-[11px] tracking-[0.22em] text-slate-400 uppercase"
+        >
+          Navegación
+        </p>
+        <ul class="space-y-2.5">
           {
             SITE.nav.map((item) => (
               <li>
                 <a
                   href={item.href}
-                  class="link-underline inline-flex min-h-0 items-center text-sm text-slate-400 hover:text-white"
+                  class="link-underline inline-flex items-center text-sm text-slate-400 hover:text-white"
                 >
                   {item.label}
                 </a>
@@ -38,14 +68,24 @@ const year = new Date().getFullYear();
       </nav>
 
       <div>
-        <p class="mb-3 text-xs font-semibold tracking-[0.2em] text-slate-500 uppercase">Conectar</p>
-        <div class="flex gap-2">
+        <p
+          class="mb-4 font-mono text-[11px] tracking-[0.22em] text-slate-400 uppercase"
+        >
+          Conectar
+        </p>
+        <a
+          href={`mailto:${SITE.email}`}
+          class="link-underline block text-sm font-medium break-all text-slate-300 hover:text-white"
+        >
+          {SITE.email}
+        </a>
+        <div class="mt-5 flex gap-2">
           <a
             href={SITE.social.github}
             target="_blank"
             rel="noopener noreferrer"
             class="btn btn-ghost btn-icon"
-            aria-label="GitHub"
+            aria-label="GitHub (se abre en una pestaña nueva)"
           >
             <Icon name="github" class="h-4 w-4" />
           </a>
@@ -54,21 +94,33 @@ const year = new Date().getFullYear();
             target="_blank"
             rel="noopener noreferrer"
             class="btn btn-ghost btn-icon"
-            aria-label="LinkedIn"
+            aria-label="LinkedIn (se abre en una pestaña nueva)"
           >
             <Icon name="linkedin" class="h-4 w-4" />
-          </a>
-          <a href={`mailto:${SITE.email}`} class="btn btn-ghost btn-icon" aria-label="Email">
-            <Icon name="mail" class="h-4 w-4" />
           </a>
         </div>
       </div>
     </div>
 
-    <div class="mt-8 flex flex-col gap-3 border-t border-slate-800/60 pt-5 sm:mt-10 sm:flex-row sm:items-center sm:justify-between sm:pt-6">
-      <p class="text-sm text-slate-500">&copy; {year} — {SITE.name}. Construido con Astro.</p>
+    <!-- Wordmark -->
+    <div class="mt-14 sm:mt-16">
+      <p
+        class="serif-accent gradient-text text-[clamp(3rem,12vw,8.5rem)] leading-[0.85] tracking-tight select-none"
+        aria-hidden="true"
+      >
+        Bairon Garita
+      </p>
+    </div>
+
+    <div
+      class="mt-8 flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p class="font-mono text-[11px] tracking-wide text-slate-400">
+        &copy; {year}
+        {SITE.name} — Astro + Tailwind
+      </p>
       <a
-        href="#hero"
+        href={`${base}#hero`}
         class="group inline-flex items-center gap-1.5 text-sm font-medium text-slate-400 hover:text-white"
       >
         Volver arriba

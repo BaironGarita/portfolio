@@ -1,108 +1,225 @@
 ---
 import { SITE } from "../site.config";
 import Icon from "./Icon.astro";
+
+const base = import.meta.env.BASE_URL;
+
+const stats = [
+  { value: "03", label: "Proyectos publicados" },
+  { value: "2023", label: "Desde que trabajo con clientes" },
+  { value: "CR", label: "Costa Rica · GMT-6" },
+  { value: "24–48 h", label: "Tiempo de respuesta" },
+];
 ---
 
 <section
   id="hero"
-  class="relative overflow-hidden pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-28"
+  class="relative flex min-h-[calc(100svh-var(--header-h))] items-center overflow-hidden pt-[calc(6rem+env(safe-area-inset-top))] pb-16 sm:pb-20"
   aria-labelledby="hero-heading"
 >
-  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+  <div class="container-page w-full">
     <div
-      class="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.07)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_75%_65%_at_50%_30%,black,transparent)]"
+      class="grid items-center gap-14 lg:grid-cols-[1.12fr_0.88fr] lg:gap-16"
     >
-    </div>
-    <div data-motion-orb class="absolute top-16 left-[-6rem] h-64 w-64 rounded-full bg-cyan-400/12 blur-3xl sm:h-72 sm:w-72"></div>
-    <div data-motion-orb class="absolute top-0 right-0 h-72 w-72 rounded-full bg-blue-500/12 blur-3xl sm:h-96 sm:w-96"></div>
-  </div>
+      <div class="max-w-2xl">
+        <p
+          data-reveal-hero
+          class="inline-flex items-center gap-2.5 rounded-full border border-mint/25 bg-mint/[0.07] px-3.5 py-1.5 text-xs font-medium tracking-wide text-mint"
+        >
+          <span class="relative flex h-1.5 w-1.5" aria-hidden="true">
+            <span
+              class="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-75"
+            ></span>
+            <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-mint"
+            ></span>
+          </span>
+          Disponible para nuevos proyectos
+        </p>
 
-  <div class="container-page grid gap-10 pb-16 sm:gap-12 sm:pb-20 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:py-16">
-    <div class="max-w-2xl">
-      <p
-        data-motion-hero
-        class="mb-5 inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-white/5 px-3.5 py-1.5 text-sm font-medium text-sky-200 backdrop-blur"
+        <h1 id="hero-heading" data-reveal-hero class="display mt-7 text-white">
+          Interfaces limpias,
+          <span
+            class="serif-accent gradient-text mt-1 block pb-2 text-[1.06em] leading-[0.86]"
+          >
+            experiencias fluidas.
+          </span>
+        </h1>
+
+        <p
+          data-reveal-hero
+          class="mt-7 max-w-xl text-base leading-8 text-slate-300 sm:text-lg"
+        >
+          Soy <strong class="font-semibold text-white">{SITE.name}</strong>,
+          desarrollador web en Costa Rica. Construyo productos digitales donde
+          el diseño, la accesibilidad y el rendimiento van de la mano.
+        </p>
+
+        <div
+          data-reveal-hero
+          class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"
+        >
+          <a
+            href={`${base}#proyectos`}
+            class="btn btn-primary w-full sm:w-auto"
+          >
+            Ver proyectos
+            <Icon
+              name="chevronDown"
+              class="icon-nudge icon-nudge-down h-4 w-4"
+            />
+          </a>
+          <a
+            href={`${base}#contacto`}
+            class="btn btn-secondary w-full sm:w-auto"
+          >
+            Hablemos de tu idea
+          </a>
+          <div
+            class="flex items-center justify-center gap-2 sm:ml-1 sm:justify-start"
+          >
+            <a
+              href={SITE.social.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-ghost btn-icon"
+              aria-label={`GitHub de ${SITE.name} (se abre en una pestaña nueva)`}
+            >
+              <Icon name="github" class="h-4 w-4" />
+            </a>
+            <a
+              href={SITE.social.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-ghost btn-icon"
+              aria-label={`LinkedIn de ${SITE.name} (se abre en una pestaña nueva)`}
+            >
+              <Icon name="linkedin" class="h-4 w-4" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta de perfil: consola + ficha -->
+      <aside
+        data-reveal-hero
+        data-reveal-delay="120"
+        class="relative"
+        aria-label="Resumen del perfil"
       >
-        <span class="relative flex h-2 w-2" aria-hidden="true">
-          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-400"></span>
-        </span>
-        Disponible para colaborar
-      </p>
+        <div class="profile-card panel overflow-hidden rounded-[1.75rem] p-1.5">
+          <div class="rounded-[1.4rem] bg-night/85 p-5 sm:p-6">
+            <div class="mb-5 flex items-center justify-between">
+              <div class="flex items-center gap-1.5" aria-hidden="true">
+                <span class="h-2.5 w-2.5 rounded-full bg-red-400/70"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-amber-400/70"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-mint/70"></span>
+              </div>
+              <p class="font-mono text-[11px] tracking-wider text-slate-400">
+                ~/bairon
+              </p>
+            </div>
 
-      <h1 id="hero-heading" data-motion-hero class="mb-5 text-[2rem] font-bold tracking-tight text-white sm:mb-6 sm:text-5xl lg:text-6xl">
-        Interfaces limpias,
-        <span class="text-gradient-animate mt-1 block bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 bg-clip-text text-transparent">
-          experiencias fluidas.
-        </span>
-      </h1>
-
-      <p data-motion-hero class="mb-8 max-w-xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
-        Soy <strong class="font-semibold text-white">{SITE.name}</strong>, desarrollador web enfocado en productos
-        claros, fáciles de usar y mantenibles.
-      </p>
-
-      <div data-motion-hero class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-        <a href="#proyectos" class="btn btn-primary w-full sm:w-auto">
-          Ver proyectos
-          <Icon name="chevronDown" class="icon-nudge icon-nudge-down h-4 w-4" />
-        </a>
-        <a href="#contacto" class="btn btn-secondary w-full sm:w-auto">Hablar de un proyecto</a>
-        <div class="flex items-center justify-center gap-2 sm:justify-start sm:pl-1">
-          <a
-            href={SITE.social.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn-ghost btn-icon"
-            aria-label={`GitHub de ${SITE.name}`}
-          >
-            <Icon name="github" class="h-4 w-4" />
-          </a>
-          <a
-            href={SITE.social.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn-ghost btn-icon"
-            aria-label={`LinkedIn de ${SITE.name}`}
-          >
-            <Icon name="linkedin" class="h-4 w-4" />
-          </a>
+            <div
+              class="space-y-1.5 font-mono text-[12.5px] leading-6 sm:text-[13px]"
+            >
+              <p class="text-slate-400">
+                <span class="text-mint">$</span> whoami
+              </p>
+              <p class="text-slate-200">Bairon Garita · Desarrollador Web</p>
+              <p class="pt-2 text-slate-400">
+                <span class="text-mint">$</span> cat enfoque.txt
+              </p>
+              <p class="text-slate-300">
+                diseño <span class="text-slate-500">→</span> desarrollo
+                <span class="text-slate-500">→</span> detalle
+              </p>
+              <p class="pt-2 text-slate-400">
+                <span class="text-mint">$</span> stack --actual
+              </p>
+              <p class="flex flex-wrap gap-x-2 gap-y-1 text-slate-300">
+                <span class="text-sky">astro</span>
+                <span class="text-slate-500">·</span>
+                <span class="text-sky">react</span>
+                <span class="text-slate-500">·</span>
+                <span class="text-sky">typescript</span>
+                <span class="text-slate-500">·</span>
+                <span class="text-sky">tailwind</span>
+              </p>
+              <p class="pt-2 text-slate-400">
+                <span class="text-mint">$</span> echo $EMAIL
+              </p>
+              <p class="truncate">
+                <a
+                  href={`mailto:${SITE.email}`}
+                  class="text-mint hover:text-white"
+                >
+                  {SITE.email}
+                </a>
+              </p>
+              <p class="flex items-center gap-2 pt-2 text-slate-400">
+                <span
+                  class="inline-block h-2 w-1.5 animate-pulse bg-mint"
+                  aria-hidden="true"></span>
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
+
+        <div
+          class="absolute -top-3 -right-2 rotate-3 rounded-full border border-sky/30 bg-panel/90 px-3 py-1 font-mono text-[11px] tracking-[0.18em] text-sky uppercase shadow-lg backdrop-blur sm:-top-4 sm:right-4"
+          aria-hidden="true"
+        >
+          UX + código
+        </div>
+      </aside>
     </div>
 
-    <aside data-motion-hero class="card card-spotlight p-5 sm:p-6" aria-label="Resumen del perfil">
-      <div class="mb-5 flex items-start justify-between gap-3">
-        <div>
-          <p class="text-sm font-medium text-slate-400">Perfil</p>
-          <h2 class="text-lg font-semibold text-white sm:text-xl">Diseño + desarrollo</h2>
-        </div>
-        <span class="chip chip-live shrink-0">UX focused</span>
-      </div>
-
-      <ul class="space-y-2.5 sm:space-y-3">
-        <li class="rounded-2xl border border-white/5 bg-white/[0.04] p-3.5 sm:p-4">
-          <p class="text-xs font-semibold tracking-[0.15em] text-sky-300 uppercase">Enfoque</p>
-          <p class="mt-1 text-sm leading-relaxed text-slate-300">
-            Interfaces claras, navegación simple y jerarquía visual sólida.
-          </p>
-        </li>
-        <li class="rounded-2xl border border-white/5 bg-white/[0.04] p-3.5 sm:p-4">
-          <p class="text-xs font-semibold tracking-[0.15em] text-cyan-300 uppercase">Valor</p>
-          <p class="mt-1 text-sm leading-relaxed text-slate-300">
-            Componentes consistentes y soluciones pensadas para crecer.
-          </p>
-        </li>
-        <li class="rounded-2xl border border-white/5 bg-white/[0.04] p-3.5 sm:p-4">
-          <p class="text-xs font-semibold tracking-[0.15em] text-fuchsia-300 uppercase">Contacto</p>
-          <a
-            class="mt-1 inline-flex text-sm font-medium break-all text-sky-300 hover:text-white"
-            href={`mailto:${SITE.email}`}
-          >
-            {SITE.email}
-          </a>
-        </li>
-      </ul>
-    </aside>
+    <!-- Franja de datos -->
+    <dl
+      data-reveal
+      class="mt-16 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-white/10 pt-8 sm:mt-20 lg:grid-cols-4"
+    >
+      {
+        stats.map((stat) => (
+          <div data-reveal-child class="min-w-0">
+            <dt class="font-mono text-[11px] tracking-[0.2em] text-slate-400 uppercase">
+              {stat.label}
+            </dt>
+            <dd class="mt-1.5 font-mono text-2xl font-medium tracking-tight text-white sm:text-3xl">
+              {stat.value}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
   </div>
 </section>
+
+<style>
+  .profile-card {
+    position: relative;
+    isolation: isolate;
+  }
+
+  /* Borde degradado sutil alrededor de la consola */
+  .profile-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+      from 200deg,
+      rgba(45, 212, 191, 0.6),
+      rgba(56, 189, 248, 0.3),
+      rgba(94, 234, 212, 0.35),
+      rgba(45, 212, 191, 0.6)
+    );
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0.75;
+  }
+</style>

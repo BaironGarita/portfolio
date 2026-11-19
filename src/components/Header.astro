@@ -5,57 +5,76 @@ import Icon from "./Icon.astro";
 
 <a
   href="#main-content"
-  class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-sky-500 focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-slate-950 focus:shadow-lg focus:outline-none"
+  class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-mint focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-night focus:shadow-lg focus:outline-none"
 >
   Saltar al contenido
 </a>
 
 <header
   id="header"
-  class="fixed top-0 right-0 left-0 z-50 border-b border-transparent bg-slate-950/40 pt-[env(safe-area-inset-top)] backdrop-blur-xl transition-[background-color,border-color,box-shadow,transform] duration-300"
+  class="fixed top-0 right-0 left-0 z-50 pt-[calc(0.75rem+env(safe-area-inset-top))] transition-transform duration-300"
   data-scrolled="false"
 >
-  <nav class="container-page flex h-16 items-center justify-between" aria-label="Principal">
-    <a
-      href="#hero"
-      class="text-base font-semibold tracking-tight sm:text-lg"
-      aria-label={`${SITE.name} — Inicio`}
+  <nav class="container-page" aria-label="Principal">
+    <div
+      class="nav-shell flex h-14 items-center justify-between gap-3 rounded-full border border-white/10 bg-night/60 px-3 shadow-[0_28px_60px_-45px_rgba(0,0,0,1)] backdrop-blur-xl transition-colors duration-300 sm:px-4"
     >
-      Bairon<span class="bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 bg-clip-text text-transparent"
-        >.Dev</span
+      <a
+        href={`${import.meta.env.BASE_URL}#hero`}
+        class="group flex items-center gap-2.5 text-white"
+        aria-label={`${SITE.name} — Inicio`}
       >
-    </a>
+        <span
+          class="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-mint via-mint to-sky text-sm font-bold text-night shadow-lg shadow-mint/20 transition-transform duration-300 group-hover:scale-105"
+          aria-hidden="true">B</span
+        >
+        <span class="text-base font-semibold tracking-tight sm:text-lg">
+          Bairon<span class="gradient-text">.Dev</span>
+        </span>
+      </a>
 
-    <ul class="hidden items-center gap-1 rounded-full border border-slate-800/70 bg-white/[0.03] p-1 md:flex">
-      {
-        SITE.nav.map((item) => (
-          <li>
-            <a
-              href={item.href}
-              data-nav-link={item.href}
-              class="nav-link inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-slate-300 hover:bg-white/10 hover:text-white"
-            >
-              {item.label}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-
-    <div class="flex items-center gap-2 sm:gap-3">
-      <a href="#contacto" class="btn btn-primary hidden sm:inline-flex">Contactar</a>
-
-      <button
-        id="menu-toggle"
-        type="button"
-        class="btn btn-ghost btn-icon md:hidden"
-        aria-label="Abrir menú"
-        aria-expanded="false"
-        aria-controls="mobile-menu"
+      <ul
+        class="hidden items-center gap-0.5 rounded-full border border-white/10 bg-white/[0.04] p-1 md:flex"
       >
-        <Icon name="menu" id="menu-open-icon" class="h-5 w-5" />
-        <Icon name="close" id="menu-close-icon" class="hidden h-5 w-5" />
-      </button>
+        {
+          SITE.nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                data-nav-link={item.hash ?? ""}
+                aria-current={
+                  item.href === `${import.meta.env.BASE_URL}blog/` &&
+                  Astro.url.pathname.includes("/blog")
+                    ? "page"
+                    : undefined
+                }
+                class="nav-link inline-flex items-center rounded-full px-3.5 py-2 text-[13px] font-medium text-slate-300 hover:bg-white/10 hover:text-white lg:px-4 lg:text-sm"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a
+          href={`${import.meta.env.BASE_URL}#contacto`}
+          class="btn btn-primary hidden sm:inline-flex">Contactar</a
+        >
+
+        <button
+          id="menu-toggle"
+          type="button"
+          class="btn btn-ghost btn-icon md:hidden"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <Icon name="menu" id="menu-open-icon" class="h-5 w-5" />
+          <Icon name="close" id="menu-close-icon" class="hidden h-5 w-5" />
+        </button>
+      </div>
     </div>
   </nav>
 </header>
@@ -72,40 +91,49 @@ import Icon from "./Icon.astro";
 >
   <div
     id="menu-overlay"
-    class="absolute inset-0 bg-slate-950/80 opacity-0 backdrop-blur-sm transition-opacity duration-300"
+    class="absolute inset-0 bg-night/80 opacity-0 backdrop-blur-sm transition-opacity duration-300"
   >
   </div>
 
   <div
     id="menu-panel"
-    class="absolute top-0 right-0 flex h-full w-[min(18rem,85vw)] translate-x-full flex-col border-l border-slate-700/70 bg-slate-900/95 shadow-2xl backdrop-blur-xl transition-transform duration-300 ease-out"
+    class="absolute top-0 right-0 flex h-full w-[min(18rem,85vw)] translate-x-full flex-col border-l border-white/10 bg-panel/95 shadow-2xl backdrop-blur-xl transition-transform duration-300 ease-out"
   >
     <div
       class="flex items-center justify-between border-b border-slate-800/60 px-5 pt-[calc(1rem+env(safe-area-inset-top))] pb-4"
     >
       <a
-        href="#hero"
-        class="menu-link text-base font-semibold text-white"
+        href={`${import.meta.env.BASE_URL}#hero`}
+        class="menu-link flex items-center gap-2.5 text-base font-semibold text-white"
         aria-label={`${SITE.name} — Inicio`}
       >
-        Bairon<span
-          class="bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 bg-clip-text text-transparent"
-          >.Dev</span
+        <span
+          class="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-mint via-mint to-sky text-sm font-bold text-night"
+          aria-hidden="true">B</span
         >
+        Bairon<span class="gradient-text">.Dev</span>
       </a>
-      <button id="menu-close" type="button" class="btn btn-ghost btn-icon" aria-label="Cerrar menú">
+      <button
+        id="menu-close"
+        type="button"
+        class="btn btn-ghost btn-icon"
+        aria-label="Cerrar menú"
+      >
         <Icon name="close" class="h-5 w-5" />
       </button>
     </div>
 
-    <nav class="flex-1 overflow-y-auto overscroll-contain px-5 py-5" aria-label="Móvil">
+    <nav
+      class="flex-1 overflow-y-auto overscroll-contain px-5 py-5"
+      aria-label="Móvil"
+    >
       <ul class="flex flex-col gap-1">
         {
           SITE.nav.map((item, index) => (
             <li>
               <a
                 href={item.href}
-                data-nav-link={item.href}
+                data-nav-link={item.hash ?? ""}
                 style={`--menu-delay: ${90 + index * 45}ms`}
                 class="menu-link nav-link flex w-full items-center rounded-xl px-4 py-3 text-base font-medium text-slate-300 hover:bg-white/10 hover:text-white"
               >
@@ -116,13 +144,16 @@ import Icon from "./Icon.astro";
         }
       </ul>
 
-      <div class="mt-6 flex gap-2 border-t border-slate-800/60 pt-5" style="--menu-delay: 300ms">
+      <div
+        class="mt-6 flex gap-2 border-t border-slate-800/60 pt-5"
+        style="--menu-delay: 300ms"
+      >
         <a
           href={SITE.social.github}
           target="_blank"
           rel="noopener noreferrer"
           class="menu-link btn btn-ghost btn-icon"
-          aria-label="GitHub"
+          aria-label="GitHub (se abre en una pestaña nueva)"
         >
           <Icon name="github" class="h-4 w-4" />
         </a>
@@ -131,7 +162,7 @@ import Icon from "./Icon.astro";
           target="_blank"
           rel="noopener noreferrer"
           class="menu-link btn btn-ghost btn-icon"
-          aria-label="LinkedIn"
+          aria-label="LinkedIn (se abre en una pestaña nueva)"
         >
           <Icon name="linkedin" class="h-4 w-4" />
         </a>
@@ -142,7 +173,10 @@ import Icon from "./Icon.astro";
       class="border-t border-slate-800/60 px-5 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]"
       style="--menu-delay: 345ms"
     >
-      <a href="#contacto" class="menu-link btn btn-primary btn-block">Contactar</a>
+      <a
+        href={`${import.meta.env.BASE_URL}#contacto`}
+        class="menu-link btn btn-primary btn-block">Contactar</a
+      >
     </div>
   </div>
 </div>
@@ -151,7 +185,7 @@ import Icon from "./Icon.astro";
   .nav-link.is-active {
     background-color: rgba(255, 255, 255, 0.1);
     color: white;
-    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.25);
+    box-shadow: 0 0 0 1px rgba(45, 212, 191, 0.3);
   }
 
   /* Drawer items: staggered entrance (delay lives in the OPEN state, so closing is instant) */
@@ -173,10 +207,10 @@ import Icon from "./Icon.astro";
     transition-delay: var(--menu-delay, 0ms);
   }
 
-  #header[data-scrolled="true"] {
-    border-color: rgba(30, 41, 59, 0.7);
-    background-color: rgba(2, 6, 23, 0.88);
-    box-shadow: 0 10px 40px -20px rgba(0, 0, 0, 0.5);
+  #header[data-scrolled="true"] .nav-shell {
+    border-color: rgba(148, 163, 184, 0.22);
+    background-color: rgba(10, 15, 30, 0.88);
+    box-shadow: 0 22px 55px -35px rgba(0, 0, 0, 0.95);
   }
 
   #header[data-hidden="true"] {
@@ -197,8 +231,11 @@ import Icon from "./Icon.astro";
     const menuLinks = document.querySelectorAll(".menu-link");
     const navLinks = document.querySelectorAll("[data-nav-link]");
 
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const FOCUSABLE =
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
     // — Scroll state: scrolled styling + hide-on-scroll-down (bound once) —
     if (!window.__headerScrollBound) {
@@ -225,7 +262,8 @@ import Icon from "./Icon.astro";
     } else if (header) {
       // Fresh header after navigation: sync with current scroll state
       header.dataset.scrolled = String(window.scrollY > 24);
-      header.dataset.hidden = window.__menuOpen || window.scrollY < 220 ? "false" : "true";
+      header.dataset.hidden =
+        window.__menuOpen || window.scrollY < 220 ? "false" : "true";
     }
 
     // — Document-level listeners bound once (delegate to the fresh DOM) —
@@ -241,9 +279,9 @@ import Icon from "./Icon.astro";
         if (e.key === "Tab") {
           const panel = document.getElementById("menu-panel");
           if (!panel) return;
-          const focusables = Array.from(panel.querySelectorAll(FOCUSABLE)).filter(
-            (el) => el.offsetParent !== null,
-          );
+          const focusables = Array.from(
+            panel.querySelectorAll(FOCUSABLE),
+          ).filter((el) => el.offsetParent !== null);
           if (!focusables.length) return;
           const first = focusables[0];
           const last = focusables[focusables.length - 1];
@@ -267,7 +305,11 @@ import Icon from "./Icon.astro";
 
     // — Active section highlight (re-created per page view) —
     const sections = Array.from(navLinks)
-      .map((link) => document.getElementById(link.getAttribute("data-nav-link")?.replace("#", "") || ""))
+      .map((link) =>
+        document.getElementById(
+          link.getAttribute("data-nav-link")?.replace("#", "") || "",
+        ),
+      )
       .filter(Boolean);
 
     function setActiveNav(activeId) {
@@ -295,6 +337,19 @@ import Icon from "./Icon.astro";
     // — Mobile menu (CSS transitions) —
     let closeTimer = 0;
 
+    /**
+     * While the drawer is open, the rest of the page must not be reachable
+     * by screen readers or Tab (aria-modal alone does not do this).
+     */
+    function setBackgroundInert(inert) {
+      document
+        .querySelectorAll("main, footer, #header, #back-to-top")
+        .forEach((el) => {
+          if (inert) el.setAttribute("inert", "");
+          else el.removeAttribute("inert");
+        });
+    }
+
     function openMenu() {
       if (!mobileMenu || !toggle) return;
       window.clearTimeout(closeTimer);
@@ -307,11 +362,14 @@ import Icon from "./Icon.astro";
       openIcon?.classList.add("hidden");
       closeIcon?.classList.remove("hidden");
       document.body.style.overflow = "hidden";
+      setBackgroundInert(true);
       if (header) header.dataset.hidden = "false";
       overlay?.classList.remove("opacity-0");
       panel?.classList.remove("translate-x-full");
       // Two frames so the closed state paints first; then items stagger in
-      requestAnimationFrame(() => requestAnimationFrame(() => mobileMenu.classList.add("is-open")));
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => mobileMenu.classList.add("is-open")),
+      );
       closeButton?.focus();
     }
 
@@ -329,6 +387,7 @@ import Icon from "./Icon.astro";
         closeIcon?.classList.add("hidden");
         document.body.style.overflow = "";
         window.__menuOpen = false;
+        setBackgroundInert(false);
         toggle.focus();
       };
 
@@ -344,7 +403,9 @@ import Icon from "./Icon.astro";
       closeTimer = window.setTimeout(finish, 300);
     }
 
-    toggle?.addEventListener("click", () => (window.__menuOpen ? closeMenu() : openMenu()));
+    toggle?.addEventListener("click", () =>
+      window.__menuOpen ? closeMenu() : openMenu(),
+    );
     closeButton?.addEventListener("click", closeMenu);
     overlay?.addEventListener("click", closeMenu);
     menuLinks.forEach((link) => link.addEventListener("click", closeMenu));
